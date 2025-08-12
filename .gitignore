@@ -1,0 +1,30 @@
+# Built artifacts
+dist/
+build/
+
+# Dependency directories
+node_modules/
+.venv/
+
+# OS generated files
+.DS_Store
+.localized
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# IDE and editor files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Logs and temporary files
+*.log
+*.tmp
+temp/
+
+# Specific to this project based on previous issues/structure
+nul
+.swarm/
+.claude-flow/
