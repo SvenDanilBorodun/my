@@ -10,34 +10,34 @@ interface FAQItem {
 
 const faqData: FAQItem[] = [
   {
-    question: "How do I access phospho pro features?",
+    question: "How do I access EduBotics Pro features?",
     answer:
-      "Click the **Subscribe** button and enter the same email you used for your Phospho account.\n\nAfter submitting your payment details, you'll be asked to fill in a short form with your **Meta Quest username** and **Discord username**. This helps us sync your access across platforms.\n\nYou'll receive an invite to access the Meta Quest app within 24 hours and you'll be added to a special Discord group.\n\nIf you have any questions, feel free to contact us at contact@phospho.ai.",
+      "Click the **Subscribe** button and enter the same email you used for your EduBotics account.\n\nAfter submitting your payment details, you'll be asked to fill in a short form with your **Meta Quest username** and **Discord username**. This helps us sync your access across educational platforms.\n\nYou'll receive an invite to access the Meta Quest learning app within 24 hours and you'll be added to our educational Discord community.\n\nIf you have any questions, feel free to contact us at contact@edubotics.ai.",
   },
   {
     question: "How can I cancel my plan?",
     answer:
-      "To manage your subscription, simply use the Stripe link sent to your email when you signed up.\n\nNeed help? Contact us anytime at contact@phospho.ai.",
+      "To manage your subscription, simply use the Stripe link sent to your email when you signed up.\n\nNeed help? Contact us anytime at contact@edubotics.ai.",
   },
   {
     question: "Why does training longer matter?",
     answer:
-      'Training time impacts how well your robot learns. Researchers from Stanford, Berkeley, and Meta [recommend training ACT models for "very long" durations.](https://docs.google.com/document/d/1FVIZfoALXg_ZkYKaYVh-qOlaXveq5CtvJHXkY25eYhs/edit?tab=t.0#heading=h.2xiz3mdijyv4) In their experiments, they trained each task for over 5 hours.\n\nSimilarly, NVIDIA\'s Gr00t team trains their models for 10x longer than the phosphobot default.\n\nLonger training require powerful GPUs and expensive hardware, which phosphobot helps you access and manage efficiently.',
+      'Extended training time helps students understand how robots learn complex behaviors. Research from Stanford, Berkeley, and Meta [shows that training ACT models for "very long" durations](https://docs.google.com/document/d/1FVIZfoALXg_ZkYKaYVh-qOlaXveq5CtvJHXkY25eYhs/edit?tab=t.0#heading=h.2xiz3mdijyv4) produces better educational outcomes. In their experiments, they trained each task for over 5 hours.\n\nSimilarly, NVIDIA\'s Gr00t team uses extended training periods for optimal learning results.\n\nEduBotics Pro provides students access to powerful cloud computing resources for these intensive learning experiences.',
   },
   {
     question: "What robots are compatible?",
     answer:
-      "phosphobot is open source and designed to work with virtually any robot.\n\nYou can find the current list of supported robots on our [GitHub](https://github.com/phospho-app/phosphobot).",
+      "EduBotics is open source and designed to work with virtually any educational robot platform.\n\nYou can find the current list of supported robots on our [GitHub](https://github.com/edubotics-ai/edubotics).",
   },
   {
     question: "Is the Meta Quest headset included?",
     answer:
-      "By subscribing, you'll get access to our [Meta Quest app](https://www.meta.com/en-gb/experiences/phospho-teleoperation/8873978782723478/?srsltid=AfmBOorMv4FFiW1uSPvz9cEgsrwhRa5r0-eQ7P-9RRSLcchwzJkBTzoB), which is compatible with **Meta Quest** 2, **Pro**, **3**, and **3s**.\n\nThe device itself needs to be bought separately.\n\nWe recommend the MQ 3S, which we use on a daily basis.",
+      "By subscribing, you'll get access to our [Meta Quest learning app](https://www.meta.com/en-gb/experiences/edubotics-learning/8873978782723478/?srsltid=AfmBOorMv4FFiW1uSPvz9cEgsrwhRa5r0-eQ7P-9RRSLcchwzJkBTzoB), which is compatible with **Meta Quest** 2, **Pro**, **3**, and **3s**.\n\nThe device itself needs to be bought separately.\n\nWe recommend the MQ 3S for the best educational experience.",
   },
   {
-    question: "I bought a phosphobot starter pack. Do I have phospho pro?",
+    question: "I bought an EduBotics educational kit. Do I have EduBotics Pro?",
     answer:
-      "Yes, you have access to phospho pro. Please reach out at contact@phospho.ai with your phospho account email and your Discord username.",
+      "Yes, educational kit purchasers have access to EduBotics Pro. Please reach out at contact@edubotics.ai with your EduBotics account email and your Discord username."
   },
 ];
 

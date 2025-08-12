@@ -1,4 +1,4 @@
-import { PhosphoProCallout } from "@/components/callout/phospho-pro";
+import { EduBoticsProCallout } from "@/components/callout/edubotics-pro";
 import { AutoComplete, type Option } from "@/components/common/autocomplete";
 import { CopyButton } from "@/components/common/copy-button";
 import { LogStream } from "@/components/custom/LogsStream";
@@ -221,7 +221,7 @@ export function AITrainingPage() {
   const generateHuggingFaceModelName = async (dataset: string) => {
     // Model name followed by 10 random characters
     const randomChars = Math.random().toString(36).substring(2, 12);
-    // Remove the name/... and replace with phospho-app/...
+    // Remove the name/... and replace with edubotics-ai/...
     const [, datasetName] = dataset.split("/");
 
     // Fetch whoami to get the username
@@ -245,13 +245,13 @@ export function AITrainingPage() {
       middlePart = `${selectedModelType}-${datasetName}`;
     }
     // Ensure total model name doesn't exceed 96 characters
-    // "phospho-app/" = 13 chars, "-" + randomChars = 11 chars, so middlePart max = 96 - 13 - 11 = 72
+    // "edubotics-ai/" = 13 chars, "-" + randomChars = 11 chars, so middlePart max = 96 - 13 - 11 = 72
     const maxMiddleLength = 72;
     if (middlePart.length > maxMiddleLength) {
       middlePart = middlePart.substring(0, maxMiddleLength);
     }
 
-    const modelName = `phospho-app/${middlePart}-${randomChars}`;
+    const modelName = `edubotics-ai/${middlePart}-${randomChars}`;
     return modelName;
   };
 
@@ -372,7 +372,7 @@ export function AITrainingPage() {
 
   return (
     <div className="container mx-auto py-8 flex flex-col gap-2">
-      {!proUser && <PhosphoProCallout />}
+      {!proUser && <EduBoticsProCallout />}
 
       <Tabs defaultValue="train">
         <div className="flex justify-between">

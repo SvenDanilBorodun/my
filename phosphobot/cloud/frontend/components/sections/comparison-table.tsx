@@ -12,12 +12,12 @@ export default function ComparisonTable() {
           <div className="text-xs text-medium-gray">
             (access to the{" "}
             <a
-              href="https://www.meta.com/en-gb/experiences/phospho-teleoperation/8873978782723478/?srsltid=AfmBOorMv4FFiW1uSPvz9cEgsrwhRa5r0-eQ7P-9RRSLcchwzJkBTzoB"
+              href="https://www.meta.com/en-gb/experiences/edubotics-learning/8873978782723478/?srsltid=AfmBOorMv4FFiW1uSPvz9cEgsrwhRa5r0-eQ7P-9RRSLcchwzJkBTzoB"
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary-blue hover:text-primary-blue-dark underline transition-colors"
             >
-              phospho teleoperation app
+              EduBotics learning app
             </a>
             )
           </div>
@@ -34,7 +34,7 @@ export default function ComparisonTable() {
       free: false,
       pro: true,
     },
-    { name: "phospho pro Discord badge", free: false, pro: true },
+    { name: "EduBotics Pro Discord badge", free: false, pro: true },
   ];
 
   const renderFeatureValue = (value: boolean | string) => {
@@ -56,7 +56,7 @@ export default function ComparisonTable() {
           <div className="p-6 invisible">Features</div>
           <div className="p-6 text-center text-dark-gray">Free</div>
           <div className="p-6 text-center font-bold text-dark-gray bg-blue-50">
-            phospho pro
+            EduBotics Pro
           </div>
         </div>
 

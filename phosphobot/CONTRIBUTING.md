@@ -1,8 +1,8 @@
-# Contributing
+# Contributing to EduBotics
 
-## Contributing
+## Educational Contributions
 
-We welcome contributions from the community! Here's how you can participate:
+We welcome contributions from educators, students, and the robotics learning community! Here's how you can participate:
 
 1. Fork this repository
 2. Create a new branch for your project
@@ -16,10 +16,10 @@ Please ensure your code is well-documented and includes:
 - Basic usage examples
 - Any special requirements
 
-## Bounty program
+## Educational Development Program
 
-Checkout our [bounty program](https://docs.google.com/spreadsheets/d/1NKyKoYbNcCMQpTzxbNJeoKWucPzJ5ULJkuiop4Av8ZQ/edit?gid=0#gid=0).
+Explore our [educational development program](https://docs.google.com/spreadsheets/d/1NKyKoYbNcCMQpTzxbNJeoKWucPzJ5ULJkuiop4Av8ZQ/edit?gid=0#gid=0) to contribute to robotics education.
 
-## How to setup the phosphobot project?
+## How to setup the EduBotics platform?
 
-Read how to install phosphobot from source [in this guide.](./phosphobot/README.md)
+Read how to install EduBotics from source [in this guide.](./edubotics/README.md)

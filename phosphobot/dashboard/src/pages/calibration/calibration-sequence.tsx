@@ -224,13 +224,13 @@ export function CalibrationSequence() {
       <Alert variant={"default"} className="mb-6">
         <AlertCircle className="h-4 w-4" />
         <AlertTitle>
-          Calibration is only required if you're not a phospho.ai customer.
+          Calibration is only required if you didn't purchase from EduBotics.
         </AlertTitle>
         <AlertDescription>
           <p>
             Robots you got from{" "}
-            <a href="https://robots.phospho.ai" className="underline">
-              robots.phospho.ai
+            <a href="https://robots.edubotics.ai" className="underline">
+              robots.edubotics.ai
             </a>{" "}
             are already calibrated.
           </p>

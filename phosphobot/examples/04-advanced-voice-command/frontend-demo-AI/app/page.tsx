@@ -78,9 +78,9 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 text-white flex flex-col items-center justify-center relative px-4">
-      {/* Logo Phospho */}
+      {/* EduBotics Logo */}
       <div className="absolute top-6 left-6">
-        <Image src="/phospho-logo.png" alt="Phospho Logo" width={120} height={40} />
+        <Image src="/edubotics-logo.png" alt="EduBotics Logo" width={120} height={40} />
       </div>
 
       {/* Bender */}
@@ -99,7 +99,7 @@ export default function Home() {
       </div>
 
       {/* Title */}
-      <h1 className="text-3xl md:text-4xl font-bold mb-2 text-center">Talk to phosphobot</h1>
+      <h1 className="text-3xl md:text-4xl font-bold mb-2 text-center">Talk to EduBotics</h1>
 
       {/* Waveform */}
       <div

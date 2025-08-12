@@ -1,4 +1,4 @@
-import { PhosphoVRCallout } from "@/components/callout/phospho-vr";
+import { EduBoticsVRCallout } from "@/components/callout/edubotics-vr";
 import { Recorder } from "@/components/common/recorder";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -117,7 +117,7 @@ export function ControlPage() {
         </TabsContent>
         <TabsContent value="VR">
           <div className="space-y-6">
-            {!proUser && <PhosphoVRCallout />}
+            {!proUser && <EduBoticsVRCallout />}
 
             <div className="flex flex-col gap-4 p-6 bg-background rounded-2xl border">
               <div className="space-y-4">
@@ -136,7 +136,7 @@ export function ControlPage() {
                   width="100%"
                   height="100%"
                   src="https://www.youtube.com/embed/AQ-xgCTdj_w?si=tUw1JIWwm75gd5_9"
-                  title="Phospho VR Control Demo"
+                  title="EduBotics VR Learning Demo"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   referrerPolicy="strict-origin-when-cross-origin"
@@ -147,7 +147,7 @@ export function ControlPage() {
               <div className="flex flex-wrap gap-3">
                 <Button asChild variant="outline">
                   <a
-                    href="https://docs.phospho.ai/examples/teleop"
+                    href="https://docs.edubotics.ai/examples/teleop"
                     target="_blank"
                     rel="noopener noreferrer"
                   >

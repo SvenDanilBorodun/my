@@ -1,4 +1,4 @@
-import { PhosphoProCallout } from "@/components/callout/phospho-pro";
+import { EduBoticsProCallout } from "@/components/callout/edubotics-pro";
 import { AIControlDisclaimer } from "@/components/common/ai-control-disclaimer";
 import { HuggingFaceKeyInput } from "@/components/common/huggingface-key";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -244,8 +244,8 @@ export function DashboardPage() {
 
   return (
     <div className="flex flex-col gap-4">
-      {/* Phospho Pro Callout */}
-      {!proUser && <PhosphoProCallout />}
+      {/* EduBotics Pro Callout */}
+      {!proUser && <EduBoticsProCallout />}
       {/* Control */}
       <Card className="flex justify-between md:min-h-[25vh]">
         <CardContent className="w-full flex flex-row gap-4">

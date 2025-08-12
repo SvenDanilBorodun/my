@@ -1,8 +1,8 @@
 [project]
 name = "phosphobot"
 version = "0.3.87"
-description = "The AI-ready robotics dev kit, with built-in remote control and VLA support."
-authors = [{ name = "phospho", email = "contact@phospho.ai" }]
+description = "Innovative learning platform for robotics and AI education with hands-on VLA training."
+authors = [{ name = "EduBotics", email = "contact@edubotics.ai" }]
 license = "MIT"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -81,7 +81,7 @@ default-groups = ["dev"]
 
 # We are cloning from our fork instead of the original repo (https://github.com/Physical-Intelligence/openpi) 
 # because we had the error unknow host: github.com
-openpi-client = { git = "https://github.com/phospho-app/openpi.git", subdirectory = "packages/openpi-client", rev = "main" }
+openpi-client = { git = "https://github.com/edubotics-ai/openpi.git", subdirectory = "packages/openpi-client", rev = "main" }
 
 # For Unitree Go2, you may install the Go2 WebRTC Connect package from source.
 # go2-webrtc-connect = { path = "../../go2_webrtc_connect", editable = true }

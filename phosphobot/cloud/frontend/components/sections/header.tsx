@@ -7,7 +7,7 @@ export default function Header() {
         <div className="flex items-center justify-start">
           <Link href="/" className="flex items-center">
             <span className="text-xl font-semibold text-primary-blue">
-              phospho
+              EduBotics
             </span>
           </Link>
         </div>

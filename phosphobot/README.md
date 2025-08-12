@@ -1,32 +1,32 @@
-# Control AI robots with phospho
+# Transform Robotics Education with EduBotics
 
-**phospho** (or **phosphobot**) is a software that lets you control robots, record data, train and use VLA (vision language action models).
+**EduBotics** is an innovative learning platform that makes robotics and AI education accessible to students. Control robots, record educational datasets, and train Vision Language Action (VLA) models in an engaging, hands-on environment.
 
 <div align="center">
 
-<a href="https://pypi.org/project/phosphobot/"><img src="https://img.shields.io/pypi/v/phosphobot?style=flat-square&label=pypi+phospho" alt="phosphobot Python package on PyPi"></a>
-<a href="https://www.ycombinator.com/companies/phospho"><img src="https://img.shields.io/badge/Y%20Combinator-W24-orange?style=flat-square" alt="Y Combinator W24"></a>
-<a href="https://discord.gg/cbkggY6NSK"><img src="https://img.shields.io/discord/1106594252043071509" alt="phospho discord"></a>
+<a href="https://pypi.org/project/edubotics/"><img src="https://img.shields.io/pypi/v/edubotics?style=flat-square&label=pypi+edubotics" alt="EduBotics Python package on PyPi"></a>
+<a href="https://edubotics.ai"><img src="https://img.shields.io/badge/Education-Platform-blue?style=flat-square" alt="Educational Platform"></a>
+<a href="https://discord.gg/cbkggY6NSK"><img src="https://img.shields.io/discord/1106594252043071509" alt="EduBotics discord"></a>
 
 </div>
 
-## Overview of phospho
+## Overview of EduBotics
 
-- 🕹️ Control your robots to record datasets in minutes with a keyboard, a gamepad, a leader arm, and more
-- ⚡ Train Action models such as ACT, π0 or gr00t-n1.5 in one click
-- 🦾 Compatible with the SO-100, SO-101, Unitree Go2, Agilex Piper...
-- 🚪 Dev-friendly API
-- 🤗 Fully compatible with LeRobot and HuggingFace
-- 🖥️ Runs on macOS, Linux and Windows
-- 🥽 Meta Quest app for teleoperation
-- 📸 Supports most cameras (classic, depth, stereo)
-- 🔌 Open Source: [Extend it with your own robots and cameras](https://github.com/phospho-app/phosphobot/tree/main/phosphobot)
+- 📚 **Student-Focused Learning**: Interactive robotics education designed for classroom and self-paced learning
+- 🕹️ **Multi-Modal Control**: Learn robot control using keyboards, gamepads, leader arms, and VR headsets
+- ⚡ **One-Click AI Training**: Train advanced models like ACT, π0, and gr00t-n1.5 with educational guidance
+- 🦾 **Educational Robot Support**: Compatible with SO-100, SO-101, Unitree Go2, Agilex Piper, and more
+- 🤗 **Industry Standard Tools**: Full compatibility with LeRobot and HuggingFace ecosystems
+- 🖥️ **Cross-Platform Learning**: Runs on macOS, Linux, and Windows
+- 🥽 **VR Learning Experience**: Immersive Meta Quest app for hands-on robotics education
+- 📸 **Comprehensive Sensor Support**: Learn with various cameras (RGB, depth, stereo)
+- 🔌 **Open Educational Platform**: [Extend with custom educational modules](https://github.com/edubotics-ai/edubotics/tree/main/edubotics)
 
-## Getting started with phosphobot
+## Getting Started with EduBotics
 
-### 1. Get a robot
+### 1. Choose Your Educational Robot
 
-Purchase your phospho starter pack at [robots.phospho.ai](https://robots.phospho.ai), or use one of the supported robots:
+Purchase an EduBotics educational kit at [robots.edubotics.ai](https://robots.edubotics.ai), or use one of the supported educational robots:
 
 - [SO-100](https://github.com/TheRobotStudio/SO-ARM100)
 - [SO-101](https://github.com/TheRobotStudio/SO-ARM100)
@@ -36,66 +36,66 @@ Purchase your phospho starter pack at [robots.phospho.ai](https://robots.phospho
 - [Unitree Go2 Air, Pro, Edu](https://shop.unitree.com/en-fr/products/unitree-go2) (beta)
 - [LeCabot](https://github.com/phospho-app/lecabot) (beta)
 
-See this [README](phosphobot/README.md) for more details on how to add support for a new robot.
+See this [README](edubotics/README.md) for more details on how to add support for a new educational robot platform.
 
-### 2. Install the phosphobot server
+### 2. Install the EduBotics Platform
 
-Install phosphobot for your OS [using the one liners available here](https://docs.phospho.ai/installation).
+Install EduBotics for your OS [using the installation guides here](https://docs.edubotics.ai/installation).
 
-### 3. Make your robot move for the first time!
+### 3. Start Your First Robotics Lesson!
 
-Go to the webapp at `YOUR_SERVER_ADDRESS:YOUR_SERVER_PORT` (default is `localhost:80`) and click control.
+Access the EduBotics learning platform at `YOUR_SERVER_ADDRESS:YOUR_SERVER_PORT` (default is `localhost:80`) and begin your robotics journey.
 
-You'll be able to control your robot with:
+Learn to control robots using:
 
-- a keyboard
-- a gamepad
-- a leader arm
-- a Meta Quest
+- **Keyboard controls** - Start with basic movement commands
+- **Gamepad controllers** - Intuitive gaming-style interface
+- **Leader arm demonstration** - Learn through physical guidance
+- **VR environments** - Immersive learning with Meta Quest
 
-> _Note: port 80 might already be in use, if that's the case, the server will spin up on localhost:8020_
+> _Note: If port 80 is in use, the server will start on localhost:8020_
 
-### 4. Record a dataset
+### 4. Create Learning Datasets
 
-Record a 50 episodes dataset of the task you want the robot to learn.
+Record educational datasets with 50+ episodes of tasks you want students to learn.
 
-Check out the [docs](https://docs.phospho.ai/basic-usage/dataset-recording) for more details.
+Explore our [educational guides](https://docs.edubotics.ai/basic-usage/dataset-recording) for structured learning activities.
 
-### 5. Train an action model
+### 5. Train Educational AI Models
 
-To train an action model on the dataset you recorded, you can:
+Teach students how AI learns by training action models:
 
-- train a model directly from the phosphobot webapp (see [this tutorial](https://docs.phospho.ai/basic-usage/training))
-- use your own machine (see [this tutorial](tutorials/00_finetune_gr00t_vla.md) to finetune gr00t n1)
+- **Guided Training**: Train models directly from the EduBotics platform with educational explanations (see [this tutorial](https://docs.edubotics.ai/basic-usage/training))
+- **Advanced Learning**: Use dedicated machines for deeper understanding (see [this tutorial](tutorials/00_finetune_gr00t_vla.md))
 
-In both cases, you will have a trained model exported to Huggingface.
+All models are exported to HuggingFace for sharing and continued learning.
 
-To learn more about training action models for robotics, check out the [docs](https://docs.phospho.ai/basic-usage/training).
+Explore comprehensive training guides in our [educational documentation](https://docs.edubotics.ai/basic-usage/training).
 
-### 6. Use the model to control your robot
+### 6. Deploy Your Educational AI Model
 
-Now that you have a trained model hosted on huggingface, you can use it to control your robot either:
+Once students have trained their model on HuggingFace, demonstrate real-world AI applications:
 
-- directly from the webapp
-- from your own code using the phosphobot python package (see [this script](scripts/quickstart_ai_gr00t.py) for an example)
+- **Interactive Deployment**: Use models directly from the learning platform
+- **Programming Practice**: Apply models in code using the EduBotics Python package (see [this educational example](scripts/quickstart_ai_gr00t.py))
 
-Learn more [in the docs](https://docs.phospho.ai/basic-usage/inference).
+Discover deployment strategies in our [educational guides](https://docs.edubotics.ai/basic-usage/inference).
 
-Congrats! You just trained and used your first action model on a real robot.
+🎉 **Congratulations!** Students have now experienced the complete AI robotics pipeline from data collection to deployment!
 
-## Advanced Usage
+## Advanced Educational Features
 
-You can directly call the phosphobot server from your own code, using the API.
+EduBotics provides a comprehensive API for advanced students and educators to build custom learning experiences.
 
-Go to the interactive docs of the API to use it interactively and learn more.
+Explore the interactive API documentation for hands-on learning:
 
-It is available at `YOUR_SERVER_ADDRESS:YOUR_SERVER_PORT/docs` (default: `localhost:80/docs`)
+Access at `YOUR_SERVER_ADDRESS:YOUR_SERVER_PORT/docs` (default: `localhost:80/docs`)
 
-We release new versions very often, so make sure to check the API docs for the latest features and changes.
+We regularly release new educational features, so check the API docs for the latest learning tools and capabilities.
 
-## Join the Community
+## Join the Educational Community
 
-Connect with other developers and share your experience in our [Discord community](https://discord.gg/cbkggY6NSK)
+Connect with educators, students, and robotics enthusiasts in our [Discord learning community](https://discord.gg/cbkggY6NSK)
 
 ## Install from source
 
@@ -104,7 +104,7 @@ Connect with other developers and share your experience in our [Discord communit
 2. Clone github
 
 ```bash
-git clone https://github.com/phospho-app/phosphobot.git
+git clone https://github.com/edubotics-ai/edubotics.git
 ```
 
 3. On MacOS and Windows, to build the frontend and start the backend, run:
@@ -116,33 +116,34 @@ make
 On Windows, the Makefile don't work. You can run the commands directly.
 
 ```
-cd ./dashboard && (npm i && npm run build && mkdir -p ../phosphobot/resources/dist/ && cp -r ./dist/* ../phosphobot/resources/dist/)
-cd phosphobot && uv run --python 3.10 phosphobot run --simulation=headless
+cd ./dashboard && (npm i && npm run build && mkdir -p ../edubotics/resources/dist/ && cp -r ./dist/* ../edubotics/resources/dist/)
+cd edubotics && uv run --python 3.10 edubotics run --simulation=headless
 ```
 
 4. Go to `localhost:80` or `localhost:8020` in your browser to see the dashboard. Go to `localhost:80/docs` to see API docs.
 
 ## Contributing
 
-We welcome contributions! Read our [contribution guide](./CONTRIBUTING.md). Also checkout our [bounty program](https://docs.google.com/spreadsheets/d/1NKyKoYbNcCMQpTzxbNJeoKWucPzJ5ULJkuiop4Av8ZQ/edit?gid=0#gid=0).
+We welcome educational contributions! Read our [contribution guide](./CONTRIBUTING.md) and explore our [educational development program](https://docs.google.com/spreadsheets/d/1NKyKoYbNcCMQpTzxbNJeoKWucPzJ5ULJkuiop4Av8ZQ/edit?gid=0#gid=0).
 
-Here are some of the ways you can contribute:
+Ways to contribute to robotics education:
 
-- Add support for new AI models
-- Add support for new teleoperation controllers
-- Add support for new robots and sensors
-- Add something you built to the examples
-- Improve the dataset collection and manipulation
-- Improve the [documentation and tutorials](https://github.com/phospho-app/docs)
-- Improve code quality and refacto
-- Improve the performance of the app
-- Fix issues you faced
+- **Educational Content**: Add new AI model tutorials and learning modules
+- **Learning Tools**: Develop new teleoperation interfaces for different skill levels
+- **Platform Support**: Add support for educational robots and sensors
+- **Student Projects**: Share educational examples and classroom activities
+- **Learning Resources**: Improve dataset collection and educational workflows
+- **Documentation**: Enhance [educational guides and tutorials](https://github.com/edubotics-ai/docs)
+- **Code Quality**: Improve platform reliability and educational user experience
+- **Performance**: Optimize the learning platform for classroom environments
+- **Accessibility**: Fix issues to make robotics education more accessible
 
-## Support
+## Educational Support
 
-- **Documentation**: Read the [documentation](https://docs.phospho.ai)
-- **Community Support**: Join our [Discord server](https://discord.gg/cbkggY6NSK)
-- **Issues**: Submit problems or suggestions through [GitHub Issues](https://github.com/phospho-app/phosphobot/issues)
+- **Learning Resources**: Explore our comprehensive [educational documentation](https://docs.edubotics.ai)
+- **Community Learning**: Join our [Discord educational community](https://discord.gg/cbkggY6NSK)
+- **Technical Support**: Report issues or suggest improvements through [GitHub Issues](https://github.com/edubotics-ai/edubotics/issues)
+- **Educator Resources**: Access teaching materials and classroom guides
 
 ## License
 
@@ -150,4 +151,4 @@ MIT License
 
 ---
 
-Made with 💚 by the Phospho community
+Made with 💚 by the EduBotics educational community

@@ -16,8 +16,8 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "phospho",
-  description: "the AI robotics company",
+  title: "EduBotics",
+  description: "innovative learning platform for robotics and AI education",
 };
 
 export default function RootLayout({

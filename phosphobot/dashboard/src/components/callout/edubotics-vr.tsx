@@ -3,9 +3,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { RectangleGoggles, TestTubeDiagonal } from "lucide-react";
 
-const PHOSPHO_PRO_SUBSCRIBE_URL = "https://phospho.ai/pro";
+const EDUBOTICS_PRO_SUBSCRIBE_URL = "https://edubotics.ai/pro";
 
-export function PhosphoVRCallout({ className }: { className?: string }) {
+export function EduBoticsVRCallout({ className }: { className?: string }) {
   return (
     <Card className={cn("border-blue-500 border-2", className)}>
       <CardContent className="p-6">
@@ -16,12 +16,12 @@ export function PhosphoVRCallout({ className }: { className?: string }) {
           <div className="flex-1 space-y-4">
             <div>
               <h3 className="font-semibold text-xl mb-2">
-                Pick how to unlock VR control
+                Unlock immersive VR learning
               </h3>
               <p className="text-muted-foreground">
-                You can unlock VR control in two ways: subscribe to Phospho Pro
-                for full access, or purchase the Meta Store app for basic VR
-                control. Choose the option that suits you best.
+                Experience robotics education like never before. Subscribe to EduBotics Pro
+                for full VR classroom access, or try the Meta Store app for basic VR
+                interaction. Choose the learning experience that fits your needs.
               </p>
             </div>
 
@@ -33,15 +33,15 @@ export function PhosphoVRCallout({ className }: { className?: string }) {
                 </div> */}
                 <div className="flex items-center gap-2 mb-2">
                   <TestTubeDiagonal className="size-5 text-blue-600" />
-                  <span className="font-semibold">Unlock with Phospho Pro</span>
+                  <span className="font-semibold">Unlock with EduBotics Pro</span>
                 </div>
                 <p className="text-sm text-muted-foreground mb-3">
-                  Full access to VR control, advanced AI training, and all
-                  premium features
+                  Complete VR learning environment, advanced AI training models, 
+                  collaborative classrooms, and premium educational content
                 </p>
                 <Button asChild className="w-full">
                   <a
-                    href={`${PHOSPHO_PRO_SUBSCRIBE_URL}?utm_source=phosphobot_app`}
+                    href={`${EDUBOTICS_PRO_SUBSCRIBE_URL}?utm_source=edubotics_app`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -55,12 +55,11 @@ export function PhosphoVRCallout({ className }: { className?: string }) {
                 <div className="flex items-center gap-2 mb-2">
                   <RectangleGoggles className="size-5 text-muted-foreground" />
                   <span className="font-semibold">
-                    Alternative: Buy the phospho teleoperation app on the Meta
-                    Store
+                    Alternative: Try the EduBotics VR app on the Meta Store
                   </span>
                 </div>
                 <p className="text-sm text-muted-foreground mb-3">
-                  This only unlocks only VR control (no additional features)
+                  Basic VR robotics interaction (limited educational features)
                 </p>
                 <Button
                   asChild
@@ -68,7 +67,7 @@ export function PhosphoVRCallout({ className }: { className?: string }) {
                   className="w-full bg-transparent"
                 >
                   <a
-                    href="https://www.meta.com/en-gb/experiences/phospho-teleoperation/8873978782723478/"
+                    href="https://www.meta.com/en-gb/experiences/edubotics-learning/8873978782723478/"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -80,8 +79,8 @@ export function PhosphoVRCallout({ className }: { className?: string }) {
 
             <div className="p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800 w-full">
               <p className="text-sm">
-                <strong>Have a phospho starter pack?</strong> Contact us to get
-                access to the VR app.
+                <strong>Educational institution?</strong> Contact us for special 
+                classroom licensing and bulk access to VR learning tools.
               </p>
             </div>
           </div>
