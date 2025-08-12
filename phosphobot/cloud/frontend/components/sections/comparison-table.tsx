@@ -1,51 +1,29 @@
 import { Check, X } from "lucide-react";
 
-export default function ComparisonTable() {
+export default function FeaturesTable() {
   const features = [
-    { name: "Control robots", free: true, pro: true },
-    { name: "AI model training", free: true, pro: true },
-    { name: "AI model inference", free: true, pro: true },
+    { name: "Robot Control Interface", included: true, description: "Intuitive controls for various robot platforms" },
+    { name: "AI Model Training", included: true, description: "Train your own robotics AI models" },
+    { name: "AI Model Deployment", included: true, description: "Deploy and test your trained models" },
     {
-      name: (
-        <>
-          <div>VR Control with Meta Quest 2, Pro, 3, 3s</div>
-          <div className="text-xs text-medium-gray">
-            (access to the{" "}
-            <a
-              href="https://www.meta.com/en-gb/experiences/edubotics-learning/8873978782723478/?srsltid=AfmBOorMv4FFiW1uSPvz9cEgsrwhRa5r0-eQ7P-9RRSLcchwzJkBTzoB"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary-blue hover:text-primary-blue-dark underline transition-colors"
-            >
-              EduBotics learning app
-            </a>
-            )
-          </div>
-        </>
-      ),
-      free: false,
-      pro: true,
+      name: "VR Learning Experience", 
+      included: true, 
+      description: "Immersive VR robotics with Meta Quest support",
+      link: "https://www.meta.com/en-gb/experiences/edubotics-learning/8873978782723478/",
+      linkText: "EduBotics VR App"
     },
-    { name: "Trainings per month", free: "3", pro: "100" },
-    { name: "Max training duration", free: "1h", pro: "2h" },
-    { name: "Max number of parallel AI trainings", free: "1", pro: "8" },
-    {
-      name: "Private channel on Discord with the team",
-      free: false,
-      pro: true,
-    },
-    { name: "EduBotics Pro Discord badge", free: false, pro: true },
+    { name: "Educational Resources", included: true, description: "Comprehensive tutorials and learning materials" },
+    { name: "Community Support", included: true, description: "Active Discord community for learners" },
+    { name: "Open Source Platform", included: true, description: "Contribute and customize for your needs" },
+    { name: "Multi-Platform Support", included: true, description: "Works on Windows, macOS, and Linux" },
   ];
 
-  const renderFeatureValue = (value: boolean | string) => {
-    if (typeof value === "boolean") {
-      return value ? (
-        <Check className="w-5 h-5 text-primary-blue" />
-      ) : (
-        <X className="w-5 h-5 text-medium-gray" />
-      );
-    }
-    return <span className="font-semibold text-dark-gray">{value}</span>;
+  const renderFeatureValue = (included: boolean) => {
+    return included ? (
+      <Check className="w-5 h-5 text-primary-blue" />
+    ) : (
+      <X className="w-5 h-5 text-medium-gray" />
+    );
   };
 
   return (
@@ -53,10 +31,10 @@ export default function ComparisonTable() {
       <div className="bg-white rounded-lg shadow-[0_10px_15px_rgba(0,0,0,0.1)] overflow-hidden border border-light-gray">
         {/* Header Row */}
         <div className="grid grid-cols-3 items-center bg-white border-b border-light-gray">
-          <div className="p-6 invisible">Features</div>
-          <div className="p-6 text-center text-dark-gray">Free</div>
+          <div className="p-6 font-bold text-dark-gray">EduBotics Features</div>
+          <div className="p-6 text-center font-bold text-dark-gray">Included</div>
           <div className="p-6 text-center font-bold text-dark-gray bg-blue-50">
-            EduBotics Pro
+            Description
           </div>
         </div>
 
@@ -70,13 +48,23 @@ export default function ComparisonTable() {
             }
           >
             <div className="p-4 flex flex-col justify-center min-h-[60px]">
-              {feature.name}
+              <div className="font-medium">{feature.name}</div>
+              {feature.link && (
+                <a
+                  href={feature.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-primary-blue hover:text-primary-blue-dark underline transition-colors mt-1"
+                >
+                  {feature.linkText}
+                </a>
+              )}
             </div>
             <div className="p-4 text-center flex justify-center items-center min-h-[60px]">
-              {renderFeatureValue(feature.free)}
+              {renderFeatureValue(feature.included)}
             </div>
             <div className="p-4 bg-blue-50 text-center flex justify-center items-center min-h-[60px] h-full">
-              {renderFeatureValue(feature.pro)}
+              <span className="text-sm text-medium-gray">{feature.description}</span>
             </div>
           </div>
         ))}

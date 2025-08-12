@@ -1,36 +1,36 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { TestTubeDiagonal } from "lucide-react";
+import { GraduationCap } from "lucide-react";
 
-const EDUBOTICS_PRO_SUBSCRIBE_URL = "https://edubotics.ai/pro";
+const EDUBOTICS_DOCS_URL = "https://docs.edubotics.ai";
 
-export function EduBoticsProCallout({ className }: { className?: string }) {
+export function EduBoticsHelpCallout({ className }: { className?: string }) {
   return (
     <Card className={cn("border-blue-500 border-2 py-2 px-4", className)}>
       <CardContent className="flex items-center p-2">
         <div className="flex flex-row justify-between items-center gap-4 w-full">
           <div>
-            <TestTubeDiagonal className="text-blue-500 size-10" />
+            <GraduationCap className="text-blue-500 size-10" />
           </div>
           <div className="flex-1">
             <div className="font-semibold text-lg mb-1.5">
-              Enhance your learning experience with{" "}
-              <span className="text-blue-500">EduBotics Pro</span>
+              New to robotics?{" "}
+              <span className="text-blue-500">Start Learning Here!</span>
             </div>
             <div className="mb-3 text-muted-foreground">
-              Access advanced robotics simulations, cutting-edge AI training models, 
-              student collaboration tools, and exclusive educational content.
+              Explore our step-by-step tutorials, educational resources, and community 
+              projects to master robotics and AI. Perfect for students and beginners.
             </div>
           </div>
           <div className="flex-shrink-0">
             <Button asChild>
               <a
-                href={`${EDUBOTICS_PRO_SUBSCRIBE_URL}?utm_source=edubotics_app`}
+                href={`${EDUBOTICS_DOCS_URL}?utm_source=edubotics_app`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Learn More
+                Start Learning
               </a>
             </Button>
           </div>
