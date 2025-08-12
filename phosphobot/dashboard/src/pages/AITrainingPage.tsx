@@ -1,4 +1,4 @@
-import { EduBoticsProCallout } from "@/components/callout/edubotics-pro";
+import { EduBoticsExplorerCallout } from "@/components/callout/edubotics-explorer";
 import { AutoComplete, type Option } from "@/components/common/autocomplete";
 import { CopyButton } from "@/components/common/copy-button";
 import { LogStream } from "@/components/custom/LogsStream";
@@ -372,7 +372,7 @@ export function AITrainingPage() {
 
   return (
     <div className="container mx-auto py-8 flex flex-col gap-2">
-      {!proUser && <EduBoticsProCallout />}
+      {!proUser && <EduBoticsExplorerCallout />}
 
       <Tabs defaultValue="train">
         <div className="flex justify-between">
