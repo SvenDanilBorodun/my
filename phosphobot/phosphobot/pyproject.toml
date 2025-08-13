@@ -1,6 +1,6 @@
 [project]
-name = "phosphobot"
-version = "0.3.87"
+name = "edubotics"
+version = "1.1"
 description = "Innovative learning platform for robotics and AI education with hands-on VLA training."
 authors = [{ name = "EduBotics", email = "contact@edubotics.ai" }]
 license = "MIT"
@@ -88,7 +88,7 @@ openpi-client = { git = "https://github.com/edubotics-ai/openpi.git", subdirecto
 
 
 [project.scripts]
-phosphobot = "phosphobot.main:cli"
+edubotics = "phosphobot.main:cli"
 
 [build-system]
 requires = ["setuptools>=42", "wheel", "toml"]

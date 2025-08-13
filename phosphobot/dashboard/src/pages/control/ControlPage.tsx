@@ -1,6 +1,5 @@
 import { EduBoticsVRCallout } from "@/components/callout/edubotics-vr";
 import { Recorder } from "@/components/common/recorder";
-import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Tooltip,
@@ -8,7 +7,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useAuth } from "@/context/AuthContext";
 import { useGlobalStore } from "@/lib/hooks";
 import { ViewVideoPage } from "@/pages/ViewVideoPage";
 import {
@@ -29,7 +27,6 @@ export function ControlPage() {
   const showCamera = useGlobalStore((state) => state.showCamera);
   const setShowCamera = useGlobalStore((state) => state.setShowCamera);
   const [activeTab, setActiveTab] = useState("keyboard");
-  const { proUser } = useAuth();
 
   const controlOptions = [
     {
@@ -116,56 +113,7 @@ export function ControlPage() {
           <SingleArmReplay />
         </TabsContent>
         <TabsContent value="VR">
-          <div className="space-y-6">
-            {!proUser && <EduBoticsVRCallout />}
-
-            <div className="flex flex-col gap-4 p-6 bg-background rounded-2xl border">
-              <div className="space-y-4">
-                <h4 className="font-semibold text-lg">
-                  How to connect to your robot in VR?
-                </h4>
-                <p className="text-muted-foreground">
-                  Control your robot in virtual reality using a Meta Quest 2,
-                  Meta Quest Pro, Meta Quest 3, or Meta Quest 3S. Watch the
-                  video to learn how to connect your robot in VR.
-                </p>
-              </div>
-
-              <div className="aspect-video max-w-2xl">
-                <iframe
-                  width="100%"
-                  height="100%"
-                  src="https://www.youtube.com/embed/AQ-xgCTdj_w?si=tUw1JIWwm75gd5_9"
-                  title="EduBotics VR Learning Demo"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  referrerPolicy="strict-origin-when-cross-origin"
-                  className="rounded-lg"
-                ></iframe>
-              </div>
-
-              <div className="flex flex-wrap gap-3">
-                <Button asChild variant="outline">
-                  <a
-                    href="https://docs.edubotics.ai/examples/teleop"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Read the Docs
-                  </a>
-                </Button>
-                <Button asChild variant="outline">
-                  <a
-                    href="https://discord.gg/cbkggY6NSK"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Get Help on Discord
-                  </a>
-                </Button>
-              </div>
-            </div>
-          </div>
+          <EduBoticsVRCallout />
         </TabsContent>
       </Tabs>
     </div>

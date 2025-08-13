@@ -24,7 +24,6 @@ import {
   BrainCircuit,
   LogOut,
   Mail,
-  TestTubeDiagonal,
 } from "lucide-react";
 import useSWR from "swr";
 
@@ -145,7 +144,7 @@ export function AIControlStatus() {
 }
 
 export function AccountTopBar() {
-  const { session, proUser, logout } = useAuth();
+  const { session, logout } = useAuth();
 
   // Get first letter of email for avatar
   const getInitial = (email: string) => {
@@ -165,38 +164,16 @@ export function AccountTopBar() {
               {getInitial(session.user_email)}
             </AvatarFallback>
           </Avatar>
-          {/* Badge overlay */}
-          <div
-            className={`absolute -bottom-2 -right-3 px-1 py-0.5 font-extrabold rounded-sm outline-[0.5px] outline-white font- ${
-              proUser
-                ? "bg-black text-blue-600 text-[10px]"
-                : "bg-gray-200 text-black text-[10px]"
-            }`}
-          >
-            {proUser ? "PRO" : "FREE"}
-          </div>
+          {/* Badge overlay - hidden for EduBotics */}
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem className="text-sm text-muted-foreground">
           <div className="flex flex-col gap-y-1">
             <div>{session.user_email}</div>
-            <div>{proUser ? "Pro User" : "Free User"}</div>
           </div>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        {!proUser && (
-          <DropdownMenuItem asChild>
-            <a
-              href=""
-              className="flex items-center"
-              target="_blank"
-            >
-              <TestTubeDiagonal className="mr-1 size-4 text-blue-600" />
-              Upgrade to Pro
-            </a>
-          </DropdownMenuItem>
-        )}
         <DropdownMenuItem asChild>
           <a
             href="mailto:contact@phospho.ai"
@@ -230,14 +207,14 @@ export function TopBar() {
       {currentPath === "/" && (
         <div className="flex-1">
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-blue-600">
-            phosphobot
+            EduBotics
           </h1>
         </div>
       )}
       {currentPath !== "/" && (
         <div className="flex-1">
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-blue-600">
-            {matchedRoute?.title ?? "phosphobot"}
+            {matchedRoute?.title ?? "EduBotics"}
           </h1>
         </div>
       )}

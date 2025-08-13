@@ -16,7 +16,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useAuth } from "@/context/AuthContext";
 import { fetcher } from "@/lib/utils";
 import { AdminTokenSettings, ServerStatus } from "@/types";
 import {
@@ -244,7 +243,6 @@ function AIModelsCard() {
 
 export function DashboardPage() {
   const navigate = useNavigate();
-  const { proUser } = useAuth();
   const { data: serverStatus, isLoading } = useSWR<ServerStatus>(
     ["/status"],
     ([url]) => fetcher(url),
@@ -260,7 +258,7 @@ export function DashboardPage() {
   return (
     <div className="flex flex-col gap-6 p-1">
       {/* EduBotics Explorer Callout */}
-      {!proUser && <EduBoticsExplorerCallout className="animate-in slide-in-from-top-2 duration-500" />}
+      <EduBoticsExplorerCallout className="animate-in slide-in-from-top-2 duration-500" />
       {/* Control */}
       <Card className="glass hover-lift border-emerald-200/30 bg-gradient-to-br from-emerald-50/50 to-emerald-100/30 dark:from-emerald-950/20 dark:to-emerald-900/10 md:min-h-[25vh]">
         <CardContent className="w-full flex flex-row gap-6 py-8">

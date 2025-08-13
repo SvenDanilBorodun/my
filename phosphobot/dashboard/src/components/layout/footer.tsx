@@ -98,7 +98,7 @@ export function Footer() {
         >
           <GithubIcon className="size-4" />
         </Button>
-        <Badge variant="outline" className="text-xs">
+        <Badge variant="outline" className="text-xs" style={{display: 'none'}}>
           {`${serverStatus?.version_id}`}{" "}
           {isLatest
             ? "(latest)"

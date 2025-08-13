@@ -1,4 +1,4 @@
-import { EduBoticsExplorerCallout } from "@/components/callout/edubotics-explorer";
+import { AITrainingInfoCallout } from "@/components/callout/ai-training-info";
 import { AutoComplete, type Option } from "@/components/common/autocomplete";
 import { CopyButton } from "@/components/common/copy-button";
 import { LogStream } from "@/components/custom/LogsStream";
@@ -13,7 +13,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useAuth } from "@/context/AuthContext";
 import { useGlobalStore } from "@/lib/hooks";
 import { fetchWithBaseUrl, fetcher } from "@/lib/utils";
 import type { AdminTokenSettings } from "@/types";
@@ -161,7 +160,6 @@ interface TrainingInfoResponse {
 }
 
 export function AITrainingPage() {
-  const { proUser } = useAuth();
 
   const selectedDataset = useGlobalStore((state) => state.selectedDataset);
   const setSelectedDataset = useGlobalStore(
@@ -372,7 +370,7 @@ export function AITrainingPage() {
 
   return (
     <div className="container mx-auto py-8 flex flex-col gap-2">
-      {!proUser && <EduBoticsExplorerCallout />}
+      <AITrainingInfoCallout />
 
       <Tabs defaultValue="train">
         <div className="flex justify-between">

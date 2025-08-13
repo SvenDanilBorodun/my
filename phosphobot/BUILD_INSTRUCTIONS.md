@@ -1,6 +1,6 @@
-# Phosphobot Executable Build Instructions
+# EduBotics Executable Build Instructions
 
-This guide explains how to build standalone executables for the Phosphobot project.
+This guide explains how to build standalone executables for the EduBotics project.
 
 ## Quick Start
 
@@ -8,14 +8,14 @@ This guide explains how to build standalone executables for the Phosphobot proje
 ```cmd
 cd phosphobot
 python -m pip install -e ".[dev]"
-python -m PyInstaller --clean phosphobot_release.spec
+python -m PyInstaller --clean edubotics_release.spec
 ```
 
 ### Linux/macOS
 ```bash
 cd phosphobot
 python3 -m pip install -e ".[dev]"
-python3 -m PyInstaller --clean phosphobot_release.spec
+python3 -m PyInstaller --clean edubotics_release.spec
 ```
 
 ## Build Scripts
@@ -45,7 +45,7 @@ python build/build_executable.py
 - Verify all resources are present
 
 ### 2. PyInstaller Spec File
-The `phosphobot_release.spec` file contains:
+The `edubotics_release.spec` file contains:
 - All required Python modules and dependencies
 - Resource files (configurations, URDF models, web assets)
 - Build optimizations and excludes
@@ -159,7 +159,7 @@ ls phosphobot/resources/
 ## Development
 
 ### Modifying the Build
-1. Edit `phosphobot_release.spec` for PyInstaller configuration
+1. Edit `edubotics_release.spec` for PyInstaller configuration
 2. Update `build/build_executable.py` for build automation
 3. Modify `.github/workflows/release.yml` for CI/CD changes
 

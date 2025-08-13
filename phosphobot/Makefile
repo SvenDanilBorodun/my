@@ -10,33 +10,33 @@ all: prod
 # Run the server for prod settings (able to connect to the Meta Quest). If npm is not installed, it will skip the build step.
 prod:
 	cd ./dashboard && (npm i && npm run build && mkdir -p ../phosphobot/resources/dist/ && cp -r ./dist/* ../phosphobot/resources/dist/)
-	cd phosphobot && uv run --python 3.10 phosphobot run --simulation=headless --no-crash-telemetry
+	cd phosphobot && uv run --python 3.10 edubotics run --simulation=headless --no-crash-telemetry
 
 # Same as prod, but with the simulation GUI (useful when adding new robots to test)
 prod_gui:
 	cd ./dashboard && (npm i && npm run build && mkdir -p ../phosphobot/resources/dist/ && cp -r ./dist/* ../phosphobot/resources/dist/)
-	cd phosphobot && uv run --python 3.10 phosphobot run --simulation=gui --no-crash-telemetry
+	cd phosphobot && uv run --python 3.10 edubotics run --simulation=gui --no-crash-telemetry
 
 # Run the server for prod settings (able to connect to the Meta Quest) but with telemetry disabled. If npm is not installed, it will skip the build step.
 prod_no_telemetry:
 	cd ./dashboard && ((npm i && npm run build && mkdir -p ../phosphobot/resources/dist/ && cp -r ./dist/* ../phosphobot/resources/dist/) || echo "npm command failed, continuing anyway") 
-	cd phosphobot && uv run phosphobot run --simulation=headless --no-telemetry
+	cd phosphobot && uv run edubotics run --simulation=headless --no-telemetry
 
 # Run the server for prod settings with the simulation enabled
 prod_sim:
-	cd ./phosphobot && uv run phosphobot run --simulation=gui --no-telemetry
+	cd ./phosphobot && uv run edubotics run --simulation=gui --no-telemetry
 
 # Run info command for prod settings
 prod_info:
-	cd ./phosphobot && uv run phosphobot info --opencv --servos
+	cd ./phosphobot && uv run edubotics info --opencv --servos
 
 # Run localhost server for dev settings
 local:
-	cd ./phosphobot && uv run phosphobot run --simulation=gui --port=8080 --host=127.0.0.1 --no-telemetry
+	cd ./phosphobot && uv run edubotics run --simulation=gui --port=8080 --host=127.0.0.1 --no-telemetry
 
 # For running integration tests
 test_server:
-	cd ./phosphobot && uv run phosphobot run --simulation=headless --only-simulation --simulate-cameras --port=8080 --host=127.0.0.1 --no-telemetry &
+	cd ./phosphobot && uv run edubotics run --simulation=headless --only-simulation --simulate-cameras --port=8080 --host=127.0.0.1 --no-telemetry &
 
 # For running the built app in test mode
 run_bin_test:
