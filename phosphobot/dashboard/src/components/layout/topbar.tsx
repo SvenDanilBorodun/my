@@ -188,7 +188,7 @@ export function AccountTopBar() {
         {!proUser && (
           <DropdownMenuItem asChild>
             <a
-              href="https://phospho.ai/pro?utm_source=phosphobot_app"
+              href=""
               className="flex items-center"
               target="_blank"
             >
@@ -251,7 +251,7 @@ export function TopBar() {
         <RobotStatusDropdown />
         <Button variant="outline" asChild>
           <a
-            href="https://docs.phospho.ai/welcome"
+            href=""
             className="flex items-center gap-1 text-sm"
             target="_blank"
             rel="noopener noreferrer"

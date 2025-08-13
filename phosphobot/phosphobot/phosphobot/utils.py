@@ -307,7 +307,7 @@ def fetch_latest_brew_version(fail_silently: bool = False) -> str:
     """
     Fetch the latest version of the brew package from the tap.
     """
-    url = "https://raw.githubusercontent.com/phospho-app/homebrew-phosphobot/refs/heads/main/Formula/phosphobot.rb"
+    url = "https://raw.githubusercontent.com"
     try:
         response = requests.get(url, timeout=5)
         response.raise_for_status()  # Raise HTTP errors

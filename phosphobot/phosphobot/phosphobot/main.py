@@ -161,6 +161,16 @@ def get_update_command():
         return "docs.edubotics.ai/update"
 
 
+def get_program_name():
+    """Get the current program name (edubotics or phosphobot)"""
+    import sys
+    import os
+    program_name = os.path.basename(sys.argv[0])
+    if program_name.endswith('.exe'):
+        program_name = program_name[:-4]
+    return program_name if program_name in ['edubotics', 'phosphobot'] else 'edubotics'
+
+
 if not _version_check_started:
     thread = threading.Thread(target=fetch_latest_version, daemon=True)
     thread.start()
@@ -332,8 +342,9 @@ def info(
                     console.print(f"[green]✅ Servo diagnostic saved: {port.device}[/green]")
 
     # Show a helpful tip at the end
+    program_name = get_program_name()
     tip_panel = Panel(
-        "[bold cyan]💡 Tip:[/bold cyan] Run [white]edubotics run[/white] to start the platform!",
+        f"[bold cyan]💡 Tip:[/bold cyan] Run [white]{program_name} run[/white] to start the platform!",
         border_style="dim cyan",
         box=ROUNDED,
         width=60
@@ -658,7 +669,7 @@ def run(
                 "[bold red]Cannot Start Server[/bold red]\n\n"
                 "[yellow]All ports are busy![/yellow]\n\n"
                 "[cyan]Solutions:[/cyan]\n"
-                "• Use custom port: [white]edubotics run --port 8000[/white]\n"
+                f"• Use custom port: [white]{get_program_name()} run --port 8000[/white]\n"
                 "• Check ports: [white]sudo lsof -i :80[/white]\n"
                 "• Free ports: [white]sudo systemctl stop apache2[/white]"
             ),
