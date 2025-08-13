@@ -49,25 +49,30 @@ function RobotStatusAlert({
 }) {
   if (isLoading) {
     return (
-      <Alert>
-        <AlertTitle className="flex flex-row gap-1 items-center">
-          <LoaderCircle className="animate-spin size-5 mr-1" />
-          Status: Loading
+      <Alert className="glass border-blue-200/50">
+        <AlertTitle className="flex flex-row gap-2 items-center text-blue-600">
+          <LoaderCircle className="animate-spin size-5" />
+          <span className="font-semibold">Status: Loading</span>
         </AlertTitle>
-        <AlertDescription>Loading robot status...</AlertDescription>
+        <AlertDescription className="text-muted-foreground mt-1">
+          Loading robot status...
+        </AlertDescription>
       </Alert>
     );
   }
 
   if (!serverStatus) {
     return (
-      <Alert>
-        <AlertTitle className="flex flex-row gap-1 items-center">
-          <span className="size-2 rounded-full bg-red-500" />
-          <Bot className="size-5 mr-1" />
-          Status: Communication Error
+      <Alert className="glass border-red-200/50 bg-red-50/50 dark:bg-red-950/20">
+        <AlertTitle className="flex flex-row gap-2 items-center text-red-600">
+          <div className="relative">
+            <span className="size-3 rounded-full bg-red-500 animate-pulse" />
+            <span className="absolute inset-0 size-3 rounded-full bg-red-500 animate-ping opacity-75" />
+          </div>
+          <Bot className="size-5" />
+          <span className="font-semibold">Status: Communication Error</span>
         </AlertTitle>
-        <AlertDescription>
+        <AlertDescription className="text-red-600/80 mt-1">
           Error fetching robot status. Please check the server connection.
         </AlertDescription>
       </Alert>
@@ -76,26 +81,32 @@ function RobotStatusAlert({
 
   if (robotConnected) {
     return (
-      <Alert>
-        <AlertTitle className="flex flex-row gap-1 items-center">
-          <span className="size-2 rounded-full bg-blue-500" />
-          <Bot className="size-5 mr-1" />
-          Status: Connected
+      <Alert className="glass border-green-200/50 bg-green-50/50 dark:bg-green-950/20">
+        <AlertTitle className="flex flex-row gap-2 items-center text-green-600">
+          <div className="relative">
+            <span className="size-3 rounded-full bg-green-500" />
+            <span className="absolute inset-0 size-3 rounded-full bg-green-500 animate-pulse opacity-75" />
+          </div>
+          <Bot className="size-5" />
+          <span className="font-semibold">Status: Connected</span>
         </AlertTitle>
-        <AlertDescription>
+        <AlertDescription className="text-green-600/80 mt-1">
           Robot is connected and ready to control.
         </AlertDescription>
       </Alert>
     );
   } else {
     return (
-      <Alert>
-        <AlertTitle className="flex flex-row gap-1 items-center">
-          <span className="size-2 rounded-full bg-red-500" />
-          <Bot className="size-5 mr-1" />
-          Status: Disconnected
+      <Alert className="glass border-amber-200/50 bg-amber-50/50 dark:bg-amber-950/20">
+        <AlertTitle className="flex flex-row gap-2 items-center text-amber-600">
+          <div className="relative">
+            <span className="size-3 rounded-full bg-amber-500 animate-pulse" />
+            <span className="absolute inset-0 size-3 rounded-full bg-amber-500 animate-ping opacity-75" />
+          </div>
+          <Bot className="size-5" />
+          <span className="font-semibold">Status: Disconnected</span>
         </AlertTitle>
-        <AlertDescription>
+        <AlertDescription className="text-amber-600/80 mt-1">
           Check the robot is plugged to your computer and powered on. Unplug and
           plug cables again if needed.
         </AlertDescription>
@@ -131,16 +142,20 @@ function AIModelsCard() {
 
   return (
     <>
-      <Card className="flex justify-between md:min-h-[25vh]">
-        <CardContent className="flex flex-col md:flex-row py-6">
-          <div className="flex-1 md:flex-1/3 mb-4 md:mb-0">
-            <div className="flex items-center gap-2 text-xl font-semibold mb-2">
-              <BrainCircuit className="text-blue-600" />
-              AI Training and Control
+      <Card className="glass hover-lift border-blue-200/30 bg-gradient-to-br from-blue-50/50 to-blue-100/30 dark:from-blue-950/20 dark:to-blue-900/10 md:min-h-[25vh]">
+        <CardContent className="flex flex-col md:flex-row py-8">
+          <div className="flex-1 md:flex-1/3 mb-6 md:mb-0">
+            <div className="flex items-center gap-3 text-xl font-bold mb-3">
+              <div className="p-2 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg">
+                <BrainCircuit className="size-6" />
+              </div>
+              <span className="bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
+                AI Training and Control
+              </span>
             </div>
-            <div className="text-xs text-muted-foreground">
+            <div className="text-sm text-muted-foreground leading-relaxed">
               Teach your robot new skills. Control your robot with Artificial
-              Intelligence.
+              Intelligence using cutting-edge machine learning models.
             </div>
           </div>
           <div className="flex-1 md:flex-2/3">
@@ -243,18 +258,22 @@ export function DashboardPage() {
     serverStatus.robots.length > 0;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-6 p-1">
       {/* EduBotics Explorer Callout */}
-      {!proUser && <EduBoticsExplorerCallout />}
+      {!proUser && <EduBoticsExplorerCallout className="animate-in slide-in-from-top-2 duration-500" />}
       {/* Control */}
-      <Card className="flex justify-between md:min-h-[25vh]">
-        <CardContent className="w-full flex flex-row gap-4">
+      <Card className="glass hover-lift border-emerald-200/30 bg-gradient-to-br from-emerald-50/50 to-emerald-100/30 dark:from-emerald-950/20 dark:to-emerald-900/10 md:min-h-[25vh]">
+        <CardContent className="w-full flex flex-row gap-6 py-8">
           <div className="flex-1/3">
-            <div className="flex items-center gap-2 text-xl font-semibold mb-2">
-              <Play className="text-blue-600" />
-              Control and Record
+            <div className="flex items-center gap-3 text-xl font-bold mb-3">
+              <div className="p-2 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-lg">
+                <Play className="size-6" />
+              </div>
+              <span className="bg-gradient-to-r from-emerald-600 to-emerald-700 bg-clip-text text-transparent">
+                Control and Record
+              </span>
             </div>
-            <div className="text-xs text-muted-foreground">
+            <div className="text-sm text-muted-foreground leading-relaxed">
               Control the robot with your keyboard, a leader arm, or a VR
               headset. Record and replay movements. Record datasets.
             </div>
@@ -272,8 +291,7 @@ export function DashboardPage() {
 
               <div className="flex-1/2">
                 <Button
-                  variant="default"
-                  className="w-full h-full"
+                  className="w-full h-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                   disabled={!robotConnected}
                   onClick={() => {
                     if (!robotConnected) return;
@@ -281,8 +299,8 @@ export function DashboardPage() {
                   }}
                 >
                   <div className="flex items-center gap-2">
-                    <Play className="text-blue-600" />
-                    Control
+                    <Play className="size-5" />
+                    <span>Control Robot</span>
                   </div>
                 </Button>
               </div>
@@ -309,14 +327,18 @@ export function DashboardPage() {
       <AIModelsCard />
 
       {/* Advanced Settings */}
-      <Card className="flex justify-between md:min-h-[25vh]">
-        <CardContent className="flex justify-between">
+      <Card className="glass hover-lift border-purple-200/30 bg-gradient-to-br from-purple-50/50 to-purple-100/30 dark:from-purple-950/20 dark:to-purple-900/10 md:min-h-[25vh]">
+        <CardContent className="flex justify-between py-8">
           <div className="flex-1/3">
-            <div className="flex items-center gap-2 text-xl font-semibold mb-2">
-              <Settings className="text-blue-600" />
-              Advanced Settings
+            <div className="flex items-center gap-3 text-xl font-bold mb-3">
+              <div className="p-2 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-lg">
+                <Settings className="size-6" />
+              </div>
+              <span className="bg-gradient-to-r from-purple-600 to-purple-700 bg-clip-text text-transparent">
+                Advanced Settings
+              </span>
             </div>
-            <div className="text-xs text-muted-foreground">
+            <div className="text-sm text-muted-foreground leading-relaxed">
               Configure the server and the robot settings.
             </div>
           </div>

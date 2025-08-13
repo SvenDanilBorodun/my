@@ -1,6 +1,6 @@
 import position1 from "@/assets/CalibrationPosition1.jpg";
 import position2 from "@/assets/CalibrationPosition2.jpg";
-import { LoadingPage } from "@/components/common/loading";
+
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -216,7 +216,7 @@ export function CalibrationSequence() {
 
   // Loading state
   if (!serverStatus && !serverError) {
-    <LoadingPage />;
+    <div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div></div>;
   }
 
   return (

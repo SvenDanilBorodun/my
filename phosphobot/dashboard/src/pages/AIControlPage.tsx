@@ -33,6 +33,7 @@ import { useGlobalStore } from "@/lib/hooks";
 import { fetchWithBaseUrl, fetcher } from "@/lib/utils";
 import type { AIStatusResponse, ServerStatus, TrainingsList } from "@/types";
 import {
+  BrainCircuit,
   CameraIcon,
   CameraOff,
   ExternalLink,
@@ -246,20 +247,27 @@ export function AIControlPage() {
 
   return (
     <div className="container mx-auto py-8 max-w-4xl">
-      <Card>
-        <CardContent className="space-y-4 pt-6">
-          <div className="flex flex-col gap-y-2">
-            <div className="text-xs text-muted-foreground">
-              Select model type
+      <Card className="glass hover-lift border-blue-200/30 bg-gradient-to-br from-blue-50/50 to-blue-100/30 dark:from-blue-950/20 dark:to-blue-900/10">
+        <CardContent className="space-y-6 pt-8">
+          <div className="flex flex-col gap-y-3">
+            <div className="flex items-center gap-2">
+              <div className="p-2 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg">
+                <BrainCircuit className="size-5" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-lg">AI Model Configuration</h3>
+                <p className="text-sm text-muted-foreground">Select your model type and configuration</p>
+              </div>
             </div>
             <ToggleGroup
               type="single"
               value={selectedModelType}
               onValueChange={setSelectedModelType}
+              className="justify-start"
             >
-              <ToggleGroupItem value="ACT_BBOX">BB-ACT</ToggleGroupItem>
-              <ToggleGroupItem value="gr00t">gr00t</ToggleGroupItem>
-              <ToggleGroupItem value="ACT">ACT</ToggleGroupItem>
+              <ToggleGroupItem value="ACT_BBOX" className="bg-gradient-to-r from-emerald-50 to-emerald-100 dark:from-emerald-950/20 dark:to-emerald-900/10 data-[state=on]:bg-gradient-to-r data-[state=on]:from-emerald-500 data-[state=on]:to-emerald-600 data-[state=on]:text-white">BB-ACT</ToggleGroupItem>
+              <ToggleGroupItem value="gr00t" className="bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-950/20 dark:to-purple-900/10 data-[state=on]:bg-gradient-to-r data-[state=on]:from-purple-500 data-[state=on]:to-purple-600 data-[state=on]:text-white">gr00t</ToggleGroupItem>
+              <ToggleGroupItem value="ACT" className="bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-950/20 dark:to-blue-900/10 data-[state=on]:bg-gradient-to-r data-[state=on]:from-blue-500 data-[state=on]:to-blue-600 data-[state=on]:text-white">ACT</ToggleGroupItem>
             </ToggleGroup>
           </div>
 
@@ -547,9 +555,10 @@ export function AIControlPage() {
                       (!prompt.trim() &&
                         modelsThatRequirePrompt.includes(selectedModelType))
                     }
+                    className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <Play className="size-5 mr-2 text-blue-600" />
-                    Start AI control
+                    <Play className="size-5 mr-2" />
+                    Start AI Control
                   </Button>
                 </div>
               </div>
@@ -558,20 +567,33 @@ export function AIControlPage() {
 
           {/* Cassette Player Style Control Panel */}
           {showCassette && (
-            <div className="bg-muted p-6 rounded-lg">
-              <div className="flex flex-col items-center space-y-4">
-                {/* Message top of cassette */}
-                <div className="text-center mb-2">
-                  <Badge variant={"outline"} className="text-sm px-3 py-1">
-                    AI state: {aiStatus?.status}
+            <div className="glass border-blue-200/30 bg-gradient-to-br from-blue-50/50 to-blue-100/30 dark:from-blue-950/20 dark:to-blue-900/10 p-8 rounded-xl">
+              <div className="flex flex-col items-center space-y-6">
+                {/* Enhanced status indicator */}
+                <div className="text-center mb-4">
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    <div className="p-2 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg">
+                      <BrainCircuit className="size-5" />
+                    </div>
+                    <h3 className="font-bold text-lg">AI Control Center</h3>
+                  </div>
+                  <Badge 
+                    variant={"outline"} 
+                    className={`text-sm px-4 py-2 font-medium ${
+                      aiStatus?.status === 'running' ? 'border-green-400 text-green-600 bg-green-50 dark:bg-green-950/20' :
+                      aiStatus?.status === 'paused' ? 'border-amber-400 text-amber-600 bg-amber-50 dark:bg-amber-950/20' :
+                      aiStatus?.status === 'waiting' ? 'border-blue-400 text-blue-600 bg-blue-50 dark:bg-blue-950/20' :
+                      'border-gray-400 text-gray-600 bg-gray-50 dark:bg-gray-950/20'
+                    }`}
+                  >
+                    AI State: {aiStatus?.status?.toUpperCase()}
                     {aiStatus?.status === "waiting" && (
-                      // add spinner
-                      <LoaderCircle className="inline-block size-4 animate-spin" />
+                      <LoaderCircle className="inline-block size-4 animate-spin ml-2" />
                     )}
                   </Badge>
                 </div>
 
-                <div className="flex justify-center gap-4">
+                <div className="flex justify-center gap-6">
                   <Button
                     size="lg"
                     variant="default"
@@ -646,14 +668,16 @@ export function AIControlPage() {
                   </Button>
                 </div>
 
-                <div className="text-xs text-center mt-2 text-muted-foreground">
-                  {aiStatus?.status === "stopped"
-                    ? "Ready to start"
-                    : aiStatus?.status === "paused"
-                      ? "AI execution paused"
-                      : aiStatus?.status === "waiting"
-                        ? "AI getting ready, please don't refresh the page, this can take up to a minute..."
-                        : "AI actively controlling robot"}
+                <div className="text-sm text-center mt-4 p-3 rounded-lg bg-white/50 dark:bg-black/20">
+                  <p className="font-medium">
+                    {aiStatus?.status === "stopped"
+                      ? "🤖 Ready to start AI control"
+                      : aiStatus?.status === "paused"
+                        ? "⏸️ AI execution paused"
+                        : aiStatus?.status === "waiting"
+                          ? "⏳ AI getting ready, please don't refresh the page, this can take up to a minute..."
+                          : "🎯 AI actively controlling robot"}
+                  </p>
                 </div>
 
                 {aiStatus !== undefined &&

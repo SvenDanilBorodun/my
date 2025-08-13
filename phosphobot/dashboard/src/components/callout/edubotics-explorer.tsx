@@ -7,8 +7,8 @@ const EDUBOTICS_EXPLORE_URL = "https://docs.edubotics.ai/advanced-features";
 
 export function EduBoticsExplorerCallout({ className }: { className?: string }) {
   return (
-    <Card className={cn("border-gradient bg-gradient-to-r from-purple-500/10 to-blue-500/10 border-2 py-2 px-4", className)}>
-      <CardContent className="flex items-center p-2">
+    <Card className={cn("glass border-gradient-animated bg-gradient-to-r from-purple-500/20 to-blue-500/20 border-2 hover-lift py-3 px-6", className)}>
+      <CardContent className="flex items-center p-3">
         <div className="flex flex-row justify-between items-center gap-4 w-full">
           <div className="flex items-center gap-2">
             <div className="relative">
@@ -32,13 +32,15 @@ export function EduBoticsExplorerCallout({ className }: { className?: string }) 
           <div className="flex-shrink-0">
             <Button 
               asChild 
-              className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white"
+              className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
             >
               <a
                 href={`${EDUBOTICS_EXPLORE_URL}?utm_source=edubotics_app`}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="flex items-center gap-2"
               >
+                <Sparkles className="size-4" />
                 Explore Now
               </a>
             </Button>

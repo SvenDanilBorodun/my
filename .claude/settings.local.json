@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(claude mcp:*)",
+      "WebSearch",
+      "Bash(npx @jpisnice/shadcn-ui-mcp-server:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

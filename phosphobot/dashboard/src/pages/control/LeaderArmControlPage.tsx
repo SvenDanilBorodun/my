@@ -1,4 +1,4 @@
-import { LoadingPage } from "@/components/common/loading";
+
 import {
   Accordion,
   AccordionContent,
@@ -317,7 +317,7 @@ export function LeaderArmControl() {
 
   // Loading state
   if (!serverStatus && !serverError) {
-    return <LoadingPage />;
+    return <div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div></div>;
   }
 
   // Check if configuration is valid

@@ -1,6 +1,6 @@
 // GamepadControl.tsx - Main component
 // Enhanced GamepadControl with multi-arm single controller support
-import { LoadingPage } from "@/components/common/loading";
+
 import { SpeedSelect } from "@/components/common/speed-select";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -507,7 +507,7 @@ export function GamepadControl() {
   ];
 
   if (serverError) return <div>Failed to load server status.</div>;
-  if (!serverStatus) return <LoadingPage />;
+  if (!serverStatus) return <div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div></div>;
 
   return (
     <div className="container mx-auto px-4 py-6 space-y-8">

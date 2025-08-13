@@ -1,5 +1,5 @@
 import controlschema from "@/assets/ControlSchema.png";
-import { LoadingPage } from "@/components/common/loading";
+
 import { SpeedSelect } from "@/components/common/speed-select";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -533,7 +533,7 @@ export function KeyboardControl() {
   ];
 
   if (serverError) return <div>Failed to load server status.</div>; // Handle error case
-  if (!serverStatus) return <LoadingPage />;
+  if (!serverStatus) return <div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div></div>;
 
   return (
     <div className="container mx-auto px-4 py-6 space-y-8">

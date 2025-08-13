@@ -1,4 +1,4 @@
-import { LoadingPage } from "@/components/common/loading";
+// Removed loading component - using inline fallback
 import { Modal } from "@/components/common/modal";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
@@ -381,7 +381,7 @@ export function BrowsePage() {
       </Alert>
     );
 
-  if (!data) return <LoadingPage />;
+  if (!data) return <div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div></div>;
 
   const handleSelectItem = (path: string) => {
     setSelectedItems((prev) => {
@@ -546,7 +546,7 @@ export function BrowsePage() {
 
   return (
     <div className="container mx-auto py-6 px-4 md:px-6">
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-6">
         <Breadcrumb className="mb-4">
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -588,7 +588,11 @@ export function BrowsePage() {
           </BreadcrumbList>
         </Breadcrumb>
 
-        <Button variant="outline" onClick={() => setOpenDownloadModal(true)}>
+        <Button 
+          variant="outline" 
+          onClick={() => setOpenDownloadModal(true)}
+          className="glass border-blue-200/50 hover:bg-blue-50 dark:hover:bg-blue-950/20 transition-all duration-200"
+        >
           <Plus className="mr-2 h-4 w-4" />
           Add dataset from hub 🤗
         </Button>
@@ -600,9 +604,10 @@ export function BrowsePage() {
           <AlertDescription>{data.tokenError}</AlertDescription>
         </Alert>
       )}
-      <Table className="bg-background rounded-lg">
-        <TableHeader>
-          <TableRow>
+      <div className="glass border-blue-200/30 bg-gradient-to-br from-blue-50/20 to-blue-100/10 dark:from-blue-950/10 dark:to-blue-900/5 rounded-xl overflow-hidden">
+        <Table>
+          <TableHeader>
+            <TableRow className="border-blue-200/30 hover:bg-blue-50/30 dark:hover:bg-blue-950/10">
             <TableCell className="w-[50px]" />
             <TableCell>Name</TableCell>
             {path.endsWith("lerobot_v2") || path.endsWith("lerobot_v2.1") ? (
@@ -620,11 +625,11 @@ export function BrowsePage() {
               </>
             ) : null}
             <TableCell></TableCell>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data.items.map((item) => (
-            <TableRow key={item.path}>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {data.items.map((item) => (
+              <TableRow key={item.path} className="border-blue-200/20 hover:bg-blue-50/30 dark:hover:bg-blue-950/10 transition-colors">
               {/* Show checkbox only if path ends with 'lerobot_v2.1' or lerobot_v2 */}
               <TableCell className="w-[50px]">
                 {item.is_dataset_dir ? (
@@ -640,17 +645,21 @@ export function BrowsePage() {
                 {item.is_dir ? (
                   <Link
                     to={item.browseUrl}
-                    className="flex items-center text-blue-500 hover:underline"
+                    className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium hover:underline transition-colors group"
                   >
-                    <Folder className="mr-2 h-4 w-4" />
+                    <div className="p-1 rounded-md bg-blue-100 dark:bg-blue-900/30 group-hover:bg-blue-200 dark:group-hover:bg-blue-800/40 transition-colors">
+                      <Folder className="h-4 w-4" />
+                    </div>
                     {item.name}
                   </Link>
                 ) : (
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <div className="flex items-center">
-                          <File className="mr-2 h-4 w-4" />
+                        <div className="flex items-center gap-2">
+                          <div className="p-1 rounded-md bg-gray-100 dark:bg-gray-800/50">
+                            <File className="h-4 w-4" />
+                          </div>
                           {item.name}
                         </div>
                       </TooltipTrigger>
@@ -752,10 +761,11 @@ export function BrowsePage() {
                   )}
                 </div>
               </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
       {data.items.length > 0 && data.items[0].previewUrl && (
         <Alert variant="default" className="mt-4">
           <AlertCircle className="h-4 w-4" />
@@ -793,6 +803,7 @@ export function BrowsePage() {
                 if (!selectedEpisode) return;
                 setConfirmEpisodeDeleteOpen(true);
               }}
+              className="hover:shadow-lg transition-all duration-200"
             >
               <Trash2 className="mr-2 h-4 w-3" />
               Delete Episode
@@ -800,7 +811,7 @@ export function BrowsePage() {
             {isRobotConnected && (
               <Button
                 type="button"
-                variant="default"
+                className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
                 onClick={async () => {
                   await handleReplayEpisode();
                 }}
