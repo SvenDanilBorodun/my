@@ -1,6 +1,6 @@
 [project]
 name = "edubotics"
-version = "1.1"
+version = "1.2"
 description = "Innovative learning platform for robotics and AI education with hands-on VLA training."
 authors = [{ name = "EduBotics", email = "contact@edubotics.ai" }]
 license = "MIT"

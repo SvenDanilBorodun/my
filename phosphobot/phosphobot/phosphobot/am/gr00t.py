@@ -841,6 +841,7 @@ class Gr00tN1(ActionModel):
                 control_signal.set_running()
                 signal_marked_as_started = True
 
+            nb_actions_too_large = 0
             for action in actions:
                 # Early stop
                 if not control_signal.is_in_loop():
@@ -848,46 +849,79 @@ class Gr00tN1(ActionModel):
                 # Send the new joint position to the robot
                 action_list = action.tolist()
                 for robot_index in range(len(robots)):
-                    logger.debug(
-                        f"Robot {robot_index} action: {action_list[robot_index * 6 : robot_index * 6 + 6]}"
-                    )
-                    if all(
-                        np.isclose(
-                            action_list[robot_index * 6 : robot_index * 6 + 6],
-                            -np.pi if unit == "rad" else -180,
-                        )
-                    ):
-                        logger.warning("All predicted actions are -pi. Skipping.")
-                        continue
+                    target_position = action_list[robot_index * 6 : robot_index * 6 + 6]
 
                     # If the distance between the current and target position is too high, skip the action
                     current_position = robots[robot_index].read_joints_position(
-                        unit=unit, max_value=max_angle, min_value=min_angle
+                        unit=unit,
+                        max_value=max_angle,
+                        min_value=min_angle,
+                        source="sim",
                     )
-                    if np.any(
-                        np.abs(
-                            current_position
-                            - action_list[robot_index * 6 : robot_index * 6 + 6]
+                    max_transition_angles: np.ndarray
+                    if unit == "degrees":
+                        # The last joint is the gripper, which can open/close
+                        max_transition_angles = np.array([90.0] * 5 + [180.0])
+                        current_to_target_diff = np.abs(
+                            (target_position - current_position + 180) % 360 - 180
                         )
-                        > 0.5 * (np.pi if unit == "rad" else 180)
+
+                    elif unit == "radians":
+                        # The last joint is the gripper, which can open/close
+                        max_transition_angles = np.array([np.pi / 2] * 5 + [np.pi])
+                        current_to_target_diff = np.abs(
+                            (target_position - current_position + np.pi) % (2 * np.pi)
+                            - np.pi
+                        )
+                    elif (
+                        unit == "other"
+                        and max_angle is not None
+                        and min_angle is not None
                     ):
-                        largest_diff = np.max(
-                            np.abs(
-                                current_position
-                                - action_list[robot_index * 6 : robot_index * 6 + 6]
-                            )
+                        # The last joint is the gripper, which can open/close
+                        max_transition_angle = (max_angle - min_angle) / 2
+                        max_transition_angles = np.array(
+                            [max_transition_angle] * 5 + [max_angle - min_angle]
                         )
-                        logger.warning(
-                            f"Skipping action for robot {robot_index} due to large position difference: {largest_diff}\nCurrent: {current_position}"
+                        current_to_target_diff = np.abs(
+                            (target_position - current_position + max_angle)
+                            % (max_angle - min_angle)
+                            - max_transition_angle
                         )
-                        continue
+                    else:
+                        raise ValueError(f"Unknown unit: {unit}")
+
+                    if np.any(current_to_target_diff > max_transition_angles):
+                        largest_diff = np.max(current_to_target_diff)
+                        largest_diff_index = np.argmax(current_to_target_diff)
+                        error_message = (
+                            f"Skipping action for robot {robot_index} because the to joint position {largest_diff_index} difference is too large: {largest_diff} > {max_transition_angles[largest_diff_index]} in units {unit}"
+                            + f"\nCurrent position: {current_position}"
+                            + f"\nTarget position: {target_position}\n"
+                            + "Possible reasons for this error:"
+                            + "\n1. Make sure you selected the *right angle unit* in the control page (angle, degrees, other)."
+                            + "\n2. Inspect your dataset joints positions to ensure they are within the expected range."
+                            + "\n3. There was an issue in the model output, please check the model training and data quality."
+                        )
+                        if nb_actions_too_large <= 20:
+                            logger.warning(error_message)
+                            nb_actions_too_large += 1
+                            continue
+                        else:
+                            control_signal.stop()
+                            raise Exception(error_message)
+                    else:
+                        logger.debug(
+                            f"Writing joint position to robot {robot_index}: {target_position}"
+                        )
 
                     robots[robot_index].write_joint_positions(
-                        angles=action_list[robot_index * 6 : robot_index * 6 + 6],
+                        angles=target_position,
                         unit=unit,
                         max_value=max_angle,
                         min_value=min_angle,
                     )
+                    nb_actions_too_large = 0
 
                 # Wait fps time
                 elapsed_time = time.perf_counter() - start_time
