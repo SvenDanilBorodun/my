@@ -4,6 +4,51 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Advanced animation framework inspired by modern design systems */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.6); }
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes morphism-blur {
+  0% { backdrop-filter: blur(10px); }
+  50% { backdrop-filter: blur(20px); }
+  100% { backdrop-filter: blur(10px); }
+}
+
+@keyframes card-entrance {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes menu-flip {
+  0% { transform: rotateX(0deg); }
+  50% { transform: rotateX(-90deg); }
+  100% { transform: rotateX(0deg); }
+}
+
+@keyframes status-breathe {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+}
+
 :root {
   --radius: 0.75rem;
   --background: oklch(1 0 0);
@@ -24,7 +69,7 @@
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: hsl(214 88% 60%);
-  
+
   /* Enhanced blue palette */
   --blue-50: hsl(213 100% 97%);
   --blue-100: hsl(213 93% 92%);
@@ -36,7 +81,7 @@
   --blue-700: hsl(219 91% 48%);
   --blue-800: hsl(220 88% 40%);
   --blue-900: hsl(221 83% 32%);
-  
+
   /* Glass morphism */
   --glass-bg: hsla(0, 0%, 100%, 0.05);
   --glass-border: hsla(0, 0%, 100%, 0.1);
@@ -76,7 +121,7 @@
   --border: hsl(217 32% 17%);
   --input: hsl(217 32% 17%);
   --ring: hsl(214 88% 65%);
-  
+
   /* Enhanced blue palette dark */
   --blue-50: hsl(222 84% 5%);
   --blue-100: hsl(221 83% 8%);
@@ -88,7 +133,7 @@
   --blue-700: hsl(213 93% 75%);
   --blue-800: hsl(213 93% 80%);
   --blue-900: hsl(213 93% 84%);
-  
+
   /* Glass morphism dark */
   --glass-bg: hsla(222, 84%, 8%, 0.6);
   --glass-border: hsla(214, 88%, 65%, 0.2);
@@ -110,8 +155,6 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
-
-
 
 @theme inline {
   --color-background: var(--background);
@@ -156,85 +199,183 @@
   * {
     @apply border-border outline-ring/50;
   }
+
+  /* Smooth transitions for all elements */
+  * {
+    transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+                color 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+                border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+                box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
   body {
     @apply bg-background text-foreground;
-    background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--blue-50)) 100%);
+    background: radial-gradient(ellipse at top, hsl(var(--blue-50)) 0%, hsl(var(--background)) 40%), 
+                linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--blue-50)) 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
+
   .dark body {
-    background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--blue-100)) 100%);
+    background: radial-gradient(ellipse at top, hsl(var(--blue-100)) 0%, hsl(var(--background)) 40%),
+                linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--blue-100)) 100%);
+    background-attachment: fixed;
   }
-  
-  /* Glass morphism utility */
+
+  /* Enhanced Glass morphism utility */
   .glass {
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    box-shadow: var(--glass-shadow);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: var(--glass-shadow), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+    position: relative;
+    overflow: hidden;
   }
-  
+
+  .glass::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s;
+    pointer-events: none;
+  }
+
+  .glass:hover::before {
+    left: 100%;
+  }
+
+  .glass-enhanced {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    box-shadow: 
+      var(--glass-shadow),
+      0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+      0 0 50px rgba(59, 130, 246, 0.1);
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .glass-glow {
+    box-shadow: 
+      var(--glass-shadow),
+      0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+      0 0 30px rgba(59, 130, 246, 0.4),
+      0 0 60px rgba(59, 130, 246, 0.2);
+    overflow: hidden;
+    border-radius: 24px;
+  }
+
   /* Animated gradients */
   .gradient-blue {
     background: linear-gradient(135deg, hsl(var(--blue-600)) 0%, hsl(var(--blue-400)) 100%);
   }
-  
+
   .gradient-blue-subtle {
     background: linear-gradient(135deg, hsl(var(--blue-50)) 0%, hsl(var(--blue-100)) 100%);
   }
-  
+
   .dark .gradient-blue-subtle {
     background: linear-gradient(135deg, hsl(var(--blue-100)) 0%, hsl(var(--blue-200)) 100%);
   }
-  
-  /* Hover animations */
+
+  /* Enhanced hover animations */
   .hover-lift {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
   }
-  
+
   .hover-lift:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 
+      0 20px 60px rgba(0,0,0,0.15),
+      0 0 0 1px rgba(255, 255, 255, 0.1) inset;
   }
-  
+
   .dark .hover-lift:hover {
-    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    box-shadow: 
+      0 20px 60px rgba(0,0,0,0.4),
+      0 0 50px rgba(59, 130, 246, 0.2),
+      0 0 0 1px rgba(255, 255, 255, 0.1) inset;
   }
-  
-  /* Animated border gradient */
+
+  .hover-glow {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+  }
+
+  .hover-glow:hover {
+    transform: translateY(-4px);
+    animation: glow 2s ease-in-out infinite;
+  }
+
+  .hover-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .card-entrance {
+    animation: card-entrance 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  /* Enhanced animated border gradient */
   .border-gradient-animated {
     position: relative;
     background: linear-gradient(135deg, hsl(var(--blue-50)) 0%, hsl(var(--blue-100)) 100%);
+    overflow: hidden;
   }
-  
+
   .dark .border-gradient-animated {
     background: linear-gradient(135deg, hsl(var(--blue-100)) 0%, hsl(var(--blue-200)) 100%);
   }
-  
+
   .border-gradient-animated::before {
     content: '';
     position: absolute;
     inset: 0;
     padding: 2px;
-    background: linear-gradient(45deg, hsl(var(--blue-400)), hsl(var(--blue-600)), hsl(var(--blue-400)));
+    background: linear-gradient(
+      45deg, 
+      hsl(var(--blue-400)), 
+      hsl(var(--blue-600)), 
+      hsl(var(--purple-500)),
+      hsl(var(--blue-400))
+    );
+    background-size: 200% 200%;
     border-radius: inherit;
     mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     mask-composite: xor;
     -webkit-mask-composite: xor;
-    animation: border-spin 3s linear infinite;
+    animation: gradient-shift 4s ease-in-out infinite, border-spin 8s linear infinite;
   }
-  
+
+  .menu-item-3d {
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .menu-item-3d:hover {
+    animation: menu-flip 0.6s ease-in-out;
+  }
+
   @keyframes border-spin {
     to {
       transform: rotate(360deg);
     }
   }
-  
+
   /* Status pulse animations */
   .status-pulse {
     animation: status-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
-  
+
   @keyframes status-pulse {
     0%, 100% {
       opacity: 1;
@@ -243,14 +384,14 @@
       opacity: 0.5;
     }
   }
-  
+
   /* Shimmer effect */
   .shimmer {
     background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
     background-size: 200% 100%;
     animation: shimmer 2s infinite;
   }
-  
+
   @keyframes shimmer {
     0% {
       background-position: -200% 0;
@@ -333,6 +474,68 @@
     --primary-blue: 214 88% 65%;
     --primary-blue-dark: 217 91% 60%;
     --primary-blue-light: 213 93% 75%;
+  }
+
+  /* Modern interaction states */
+  .interactive {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .interactive:hover {
+    transform: scale(1.02);
+  }
+
+  .interactive:active {
+    transform: scale(0.98);
+  }
+
+  /* Status indicators with breathing animation */
+  .status-indicator {
+    animation: status-breathe 2s ease-in-out infinite;
+  }
+
+  /* Enhanced gradient backgrounds */
+  .gradient-mesh {
+    background: 
+      radial-gradient(at 40% 20%, hsl(var(--blue-400)) 0px, transparent 50%),
+      radial-gradient(at 80% 0%, hsl(var(--purple-400)) 0px, transparent 50%),
+      radial-gradient(at 40% 50%, hsl(var(--blue-300)) 0px, transparent 50%),
+      radial-gradient(at 80% 50%, hsl(var(--purple-300)) 0px, transparent 50%),
+      radial-gradient(at 40% 80%, hsl(var(--blue-400)) 0px, transparent 50%),
+      radial-gradient(at 80% 80%, hsl(var(--purple-400)) 0px, transparent 50%);
+  }
+
+  /* Advanced button styles inspired by the design system */
+  .btn-glass {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .btn-glass:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  .btn-gradient {
+    background: linear-gradient(135deg, hsl(var(--blue-500)) 0%, hsl(var(--purple-500)) 100%);
+    background-size: 200% 200%;
+    animation: gradient-shift 3s ease infinite;
+    border: none;
+    color: white;
+    font-weight: 600;
+  }
+
+  .btn-gradient:hover {
+    animation-duration: 1s;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
   }
 }
 

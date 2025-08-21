@@ -1,9 +1,11 @@
 import { EduBoticsExplorerCallout } from "@/components/callout/edubotics-explorer";
 import { AIControlDisclaimer } from "@/components/common/ai-control-disclaimer";
 import { HuggingFaceKeyInput } from "@/components/common/huggingface-key";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { CardContent } from "@/components/ui/card";
+import { GlassCard } from "@/components/ui/glass-card";
+import { StatusIndicator } from "@/components/ui/status-indicator";
+import { ActionButton } from "@/components/ui/action-button";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -20,22 +22,24 @@ import { fetcher } from "@/lib/utils";
 import { AdminTokenSettings, ServerStatus } from "@/types";
 import {
   AlertTriangle,
-  Bot,
   BrainCircuit,
   Camera,
   Code,
   Dumbbell,
   FileCog,
   FolderOpen,
-  LoaderCircle,
   Network,
   Play,
   Settings,
   Sliders,
+  Sparkles,
+  Zap,
+  ArrowRight,
 } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useSWR from "swr";
+import { motion } from "framer-motion";
 
 function RobotStatusAlert({
   serverStatus,
@@ -48,68 +52,51 @@ function RobotStatusAlert({
 }) {
   if (isLoading) {
     return (
-      <Alert className="glass border-blue-200/50">
-        <AlertTitle className="flex flex-row gap-2 items-center text-blue-600">
-          <LoaderCircle className="animate-spin size-5" />
-          <span className="font-semibold">Status: Loading</span>
-        </AlertTitle>
-        <AlertDescription className="text-muted-foreground mt-1">
-          Loading robot status...
-        </AlertDescription>
-      </Alert>
+      <StatusIndicator 
+        status="loading" 
+        size="md" 
+        variant="premium"
+        label="Status: Loading"
+        description="Loading robot status..."
+        showPulse={false}
+      />
     );
   }
 
   if (!serverStatus) {
     return (
-      <Alert className="glass border-red-200/50 bg-red-50/50 dark:bg-red-950/20">
-        <AlertTitle className="flex flex-row gap-2 items-center text-red-600">
-          <div className="relative">
-            <span className="size-3 rounded-full bg-red-500 animate-pulse" />
-            <span className="absolute inset-0 size-3 rounded-full bg-red-500 animate-ping opacity-75" />
-          </div>
-          <Bot className="size-5" />
-          <span className="font-semibold">Status: Communication Error</span>
-        </AlertTitle>
-        <AlertDescription className="text-red-600/80 mt-1">
-          Error fetching robot status. Please check the server connection.
-        </AlertDescription>
-      </Alert>
+      <StatusIndicator 
+        status="error" 
+        size="md" 
+        variant="premium"
+        label="Status: Communication Error"
+        description="Error fetching robot status. Please check the server connection."
+        showPulse={false}
+      />
     );
   }
 
   if (robotConnected) {
     return (
-      <Alert className="glass border-green-200/50 bg-green-50/50 dark:bg-green-950/20">
-        <AlertTitle className="flex flex-row gap-2 items-center text-green-600">
-          <div className="relative">
-            <span className="size-3 rounded-full bg-green-500" />
-            <span className="absolute inset-0 size-3 rounded-full bg-green-500 animate-pulse opacity-75" />
-          </div>
-          <Bot className="size-5" />
-          <span className="font-semibold">Status: Connected</span>
-        </AlertTitle>
-        <AlertDescription className="text-green-600/80 mt-1">
-          Robot is connected and ready to control.
-        </AlertDescription>
-      </Alert>
+      <StatusIndicator 
+        status="connected" 
+        size="md" 
+        variant="premium"
+        label="Status: Connected"
+        description="Robot is connected and ready to control."
+        showPulse={false}
+      />
     );
   } else {
     return (
-      <Alert className="glass border-amber-200/50 bg-amber-50/50 dark:bg-amber-950/20">
-        <AlertTitle className="flex flex-row gap-2 items-center text-amber-600">
-          <div className="relative">
-            <span className="size-3 rounded-full bg-amber-500 animate-pulse" />
-            <span className="absolute inset-0 size-3 rounded-full bg-amber-500 animate-ping opacity-75" />
-          </div>
-          <Bot className="size-5" />
-          <span className="font-semibold">Status: Disconnected</span>
-        </AlertTitle>
-        <AlertDescription className="text-amber-600/80 mt-1">
-          Check the robot is plugged to your computer and powered on. Unplug and
-          plug cables again if needed.
-        </AlertDescription>
-      </Alert>
+      <StatusIndicator 
+        status="disconnected" 
+        size="md" 
+        variant="premium"
+        label="Status: Disconnected"
+        description="Check the robot is plugged to your computer and powered on. Unplug and plug cables again if needed."
+        showPulse={false}
+      />
     );
   }
 }
@@ -129,7 +116,6 @@ function AIModelsCard() {
       navigate(`/inference`);
       return;
     }
-    // Otherwise display the warning dialog
     setShowWarning(true);
   };
 
@@ -141,20 +127,32 @@ function AIModelsCard() {
 
   return (
     <>
-      <Card className="glass hover-lift border-blue-200/30 bg-gradient-to-br from-blue-50/50 to-blue-100/30 dark:from-blue-950/20 dark:to-blue-900/10 md:min-h-[25vh]">
-        <CardContent className="flex flex-col md:flex-row py-8">
+      <GlassCard 
+        variant="premium" 
+        gradient="blue" 
+        hover="lift" 
+        border="animated"
+        className="md:min-h-[25vh] relative overflow-hidden"
+      >
+        <CardContent className="flex flex-col md:flex-row py-8 relative z-10">
           <div className="flex-1 md:flex-1/3 mb-6 md:mb-0">
-            <div className="flex items-center gap-3 text-xl font-bold mb-3">
-              <div className="p-2 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg">
-                <BrainCircuit className="size-6" />
+            <div className="flex items-center gap-4 text-xl font-bold mb-4">
+              <div className="p-3 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-lg hover-glow">
+                <BrainCircuit className="size-7" />
               </div>
-              <span className="bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
-                AI Training and Control
-              </span>
+              <div className="flex flex-col">
+                <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-700 bg-clip-text text-transparent text-2xl font-extrabold">
+                  AI Training & Control
+                </span>
+                <div className="flex items-center gap-2 mt-1">
+                  <Sparkles className="size-4 text-blue-500" />
+                  <span className="text-sm text-muted-foreground font-normal">Next-gen robotics</span>
+                </div>
+              </div>
             </div>
             <div className="text-sm text-muted-foreground leading-relaxed">
-              Teach your robot new skills. Control your robot with Artificial
-              Intelligence using cutting-edge machine learning models.
+              Teach your robot new skills with cutting-edge machine learning models.
+              Experience the future of human-robot collaboration.
             </div>
           </div>
           <div className="flex-1 md:flex-2/3">
@@ -165,19 +163,20 @@ function AIModelsCard() {
                 </div>
               )}
 
-              <div className="flex flex-col md:flex-row gap-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <Tooltip>
-                  <TooltipTrigger className="flex-1/2" asChild>
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        navigate("/train");
-                      }}
+                  <TooltipTrigger asChild>
+                    <ActionButton
+                      variant="glass"
+                      size="lg"
+                      onClick={() => navigate("/train")}
                       disabled={!adminSettingsTokens?.huggingface}
+                      icon={<Dumbbell className="size-5" />}
+                      iconPosition="left"
+                      glow={!!adminSettingsTokens?.huggingface}
                     >
-                      <Dumbbell className="size-5" />
-                      Train an AI Model
-                    </Button>
+                      Train AI Model
+                    </ActionButton>
                   </TooltipTrigger>
                   <TooltipContent>
                     <div>
@@ -188,14 +187,20 @@ function AIModelsCard() {
                   </TooltipContent>
                 </Tooltip>
                 <Tooltip>
-                  <TooltipTrigger className="flex-1/2" asChild>
-                    <Button
+                  <TooltipTrigger asChild>
+                    <ActionButton
+                      variant="gradient"
+                      size="lg"
+                      gradient="rainbow"
                       onClick={handleControlByAI}
                       disabled={!adminSettingsTokens?.huggingface}
+                      icon={<ArrowRight className="size-5" />}
+                      iconPosition="right"
+                      glow={!!adminSettingsTokens?.huggingface}
+                      pulse={!!adminSettingsTokens?.huggingface}
                     >
-                      <BrainCircuit className="size-5" />
-                      Go to AI Control
-                    </Button>
+                      AI Control
+                    </ActionButton>
                   </TooltipTrigger>
                   <TooltipContent>
                     <div>
@@ -208,7 +213,30 @@ function AIModelsCard() {
             </div>
           </div>
         </CardContent>
-      </Card>
+        
+        {/* Floating particles effect */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          {[...Array(6)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute size-2 bg-blue-400/20 rounded-full"
+              style={{
+                left: `${20 + i * 15}%`,
+                top: `${30 + (i % 2) * 40}%`,
+              }}
+              animate={{
+                y: [0, -20, 0],
+                opacity: [0.2, 0.6, 0.2],
+              }}
+              transition={{
+                duration: 3 + i * 0.5,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+          ))}
+        </div>
+      </GlassCard>
       <Dialog open={showWarning} onOpenChange={setShowWarning}>
         <DialogContent className="sm:max-w-md border-amber-300 border">
           <DialogHeader className="bg-amber-50 dark:bg-amber-950/20 p-4 -m-4 rounded-t-lg">
@@ -256,30 +284,46 @@ export function DashboardPage() {
     serverStatus.robots.length > 0;
 
   return (
-    <div className="flex flex-col gap-6 p-1">
+    <div className="flex flex-col gap-8 p-1 relative">
+      {/* Background effects */}
+      <div className="absolute inset-0 gradient-mesh opacity-20 pointer-events-none" />
+      
       {/* EduBotics Explorer Callout */}
-      <EduBoticsExplorerCallout className="animate-in slide-in-from-top-2 duration-500" />
-      {/* Control */}
-      <Card className="glass hover-lift border-emerald-200/30 bg-gradient-to-br from-emerald-50/50 to-emerald-100/30 dark:from-emerald-950/20 dark:to-emerald-900/10 md:min-h-[25vh]">
-        <CardContent className="w-full flex flex-row gap-6 py-8">
-          <div className="flex-1/3">
-            <div className="flex items-center gap-3 text-xl font-bold mb-3">
-              <div className="p-2 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-lg">
-                <Play className="size-6" />
+      <EduBoticsExplorerCallout />
+      
+      {/* Control Section */}
+      <GlassCard 
+        variant="premium" 
+        gradient="emerald" 
+        hover="lift" 
+        border="glow"
+        className="md:min-h-[25vh] relative overflow-hidden"
+      >
+        <CardContent className="w-full flex flex-col md:flex-row gap-8 py-8 relative z-10">
+          <div className="flex-1 md:flex-1/3">
+            <div className="flex items-center gap-4 text-xl font-bold mb-4">
+              <div className="p-3 rounded-2xl bg-gradient-to-br from-emerald-500 to-green-600 text-white shadow-lg hover-float">
+                <Play className="size-7" />
               </div>
-              <span className="bg-gradient-to-r from-emerald-600 to-emerald-700 bg-clip-text text-transparent">
-                Control and Record
-              </span>
+              <div className="flex flex-col">
+                <span className="bg-gradient-to-r from-emerald-600 to-green-700 bg-clip-text text-transparent text-2xl font-extrabold">
+                  Control & Record
+                </span>
+                <div className="flex items-center gap-2 mt-1">
+                  <Zap className="size-4 text-emerald-500" />
+                  <span className="text-sm text-muted-foreground font-normal">Real-time control</span>
+                </div>
+              </div>
             </div>
             <div className="text-sm text-muted-foreground leading-relaxed">
               Control the robot with your keyboard, a leader arm, or a VR
-              headset. Record and replay movements. Record datasets.
+              headset. Record and replay movements. Build comprehensive datasets.
             </div>
           </div>
 
-          <div className="flex-2/3">
-            <div className="mb-2 flex flex-col md:flex-row gap-2">
-              <div className="flex-1/2">
+          <div className="flex-1 md:flex-2/3 space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
                 <RobotStatusAlert
                   serverStatus={serverStatus}
                   isLoading={isLoading}
@@ -287,90 +331,132 @@ export function DashboardPage() {
                 />
               </div>
 
-              <div className="flex-1/2">
-                <Button
-                  className="w-full h-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              <div>
+                <ActionButton
+                  variant="gradient"
+                  size="xl"
+                  gradient="emerald"
                   disabled={!robotConnected}
                   onClick={() => {
                     if (!robotConnected) return;
                     navigate("/control");
                   }}
+                  icon={<Play className="size-5" />}
+                  iconPosition="left"
+                  glow={robotConnected}
+                  pulse={robotConnected}
+                  className="w-full h-full min-h-[80px]"
                 >
-                  <div className="flex items-center gap-2">
-                    <Play className="size-5" />
-                    <span>Control Robot</span>
+                  <div className="flex flex-col items-center">
+                    <span className="text-lg font-bold">Control Robot</span>
+                    <span className="text-xs opacity-90">Start teleoperation</span>
                   </div>
-                </Button>
+                </ActionButton>
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              <Button asChild variant="outline">
-                <a href="/browse">
-                  <FolderOpen className="size-5" />
-                  Browse your Datasets
-                </a>
-              </Button>
-              <Button asChild variant="outline">
-                <a href="/calibration">
-                  <Sliders className="size-5" />
-                  Calibration
-                </a>
-              </Button>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <ActionButton
+                variant="glass"
+                size="lg"
+                onClick={() => navigate("/browse")}
+                icon={<FolderOpen className="size-5" />}
+                iconPosition="left"
+              >
+                Browse Datasets
+              </ActionButton>
+              <ActionButton
+                variant="glass"
+                size="lg"
+                onClick={() => navigate("/calibration")}
+                icon={<Sliders className="size-5" />}
+                iconPosition="left"
+              >
+                Calibration
+              </ActionButton>
             </div>
           </div>
         </CardContent>
-      </Card>
+      </GlassCard>
 
       {/* AI Models */}
-      <AIModelsCard />
+      <div>
+        <AIModelsCard />
+      </div>
 
       {/* Advanced Settings */}
-      <Card className="glass hover-lift border-purple-200/30 bg-gradient-to-br from-purple-50/50 to-purple-100/30 dark:from-purple-950/20 dark:to-purple-900/10 md:min-h-[25vh]">
-        <CardContent className="flex justify-between py-8">
-          <div className="flex-1/3">
-            <div className="flex items-center gap-3 text-xl font-bold mb-3">
-              <div className="p-2 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-lg">
-                <Settings className="size-6" />
+      <GlassCard 
+        variant="premium" 
+        gradient="purple" 
+        hover="lift" 
+        border="animated"
+        className="md:min-h-[25vh] relative overflow-hidden"
+      >
+        <CardContent className="flex flex-col md:flex-row gap-8 py-8 relative z-10">
+          <div className="flex-1 md:flex-1/3">
+            <div className="flex items-center gap-4 text-xl font-bold mb-4">
+              <div className="p-3 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 text-white shadow-lg hover-glow">
+                <Settings className="size-7" />
               </div>
-              <span className="bg-gradient-to-r from-purple-600 to-purple-700 bg-clip-text text-transparent">
-                Advanced Settings
-              </span>
+              <div className="flex flex-col">
+                <span className="bg-gradient-to-r from-purple-600 to-indigo-700 bg-clip-text text-transparent text-2xl font-extrabold">
+                  Advanced Settings
+                </span>
+                <div className="flex items-center gap-2 mt-1">
+                  <Settings className="size-4 text-purple-500" />
+                  <span className="text-sm text-muted-foreground font-normal">System config</span>
+                </div>
+              </div>
             </div>
             <div className="text-sm text-muted-foreground leading-relaxed">
-              Configure the server and the robot settings.
+              Configure the server and robot settings. Access API documentation
+              and system management tools.
             </div>
           </div>
-          <div className="flex-2/3">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              <Button asChild variant="secondary">
-                <a href="/admin">
-                  <FileCog className="size-5" />
-                  Admin Configuration
-                </a>
-              </Button>
-              <Button asChild variant="secondary">
-                <a href="/docs">
-                  <Code className="size-5" />
-                  API Documentation
-                </a>
-              </Button>
-
-              <Button asChild variant="outline">
-                <a href="/viz">
-                  <Camera className="size-5" />
-                  Camera Overview
-                </a>
-              </Button>
-              <Button asChild variant="outline">
-                <a href="/network">
-                  <Network className="size-5" />
-                  Network Management
-                </a>
-              </Button>
+          <div className="flex-1 md:flex-2/3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <ActionButton
+                variant="premium"
+                size="lg"
+                onClick={() => navigate("/admin")}
+                icon={<FileCog className="size-5" />}
+                iconPosition="left"
+                glow
+              >
+                Admin Configuration
+              </ActionButton>
+              <ActionButton
+                variant="premium"
+                size="lg"
+                onClick={() => window.open("/docs", "_blank")}
+                icon={<Code className="size-5" />}
+                iconPosition="left"
+                glow
+              >
+                API Documentation
+              </ActionButton>
+              <ActionButton
+                variant="glass"
+                size="lg"
+                onClick={() => navigate("/viz")}
+                icon={<Camera className="size-5" />}
+                iconPosition="left"
+              >
+                Camera Overview
+              </ActionButton>
+              <ActionButton
+                variant="glass"
+                size="lg"
+                onClick={() => navigate("/network")}
+                icon={<Network className="size-5" />}
+                iconPosition="left"
+              >
+                Network Management
+              </ActionButton>
             </div>
           </div>
         </CardContent>
-      </Card>
+      </GlassCard>
     </div>
   );
 }

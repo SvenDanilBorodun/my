@@ -1,12 +1,7 @@
 import { AppSidebar } from "@/components/common/app-sidebar";
-import { SidebarProvider } from "@/components/ui/sidebar";
 
+// This file is now just a wrapper - the actual Sidebar component 
+// is used directly in layout.tsx with the SidebarProvider
 export function Sidebar() {
-  return (
-    <div className="hidden md:block w-[250px] border-r border-muted">
-      <SidebarProvider defaultOpen={true}>
-        <AppSidebar />
-      </SidebarProvider>
-    </div>
-  );
+  return <AppSidebar />;
 }
