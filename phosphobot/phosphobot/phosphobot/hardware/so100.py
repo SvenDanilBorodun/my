@@ -214,10 +214,24 @@ class SO100Hardware(BaseManipulator):
 
     def write_motor_position(self, servo_id: int, units: int, **kwargs) -> None:
         """
-        Write a position to a Feetech servo.
+        Write a position to a Feetech servo with gripper protection for servo 6.
         """
         if not self.is_connected:
             return None
+
+        # Special protection for gripper (servo ID 6)
+        if servo_id == 6 and self.config is not None:
+            current_pos = self.read_motor_position(6)
+            if current_pos is not None:
+                # Calculate if gripper is closing (moving towards close position)
+                open_position = self.config.servos_calibration_position[-1]
+                close_position = self.config.servos_offsets[-1]
+                
+                # If target position is closer to close position than current position, it's closing
+                if (abs(units - close_position) < abs(current_pos - close_position) and 
+                    self.check_gripper_resistance()):
+                    logger.info(f"Gripper resistance detected for servo {servo_id}, stopping closing motion")
+                    return
 
         try:
             self.motors_bus.write(
@@ -234,13 +248,33 @@ class SO100Hardware(BaseManipulator):
         self, q_target: np.ndarray, enable_gripper: bool = True
     ) -> None:
         """
-        Write a position to all motors of the robot.
+        Write a position to all motors of the robot with gripper protection.
         """
         if not self.is_connected:
             return None
 
         values = q_target.tolist()
         motor_names = list(self.motors.keys())
+
+        # Gripper protection: check if gripper is moving towards closing
+        if enable_gripper and len(values) == len(self.motors):
+            # Check gripper resistance before moving
+            gripper_target = values[-1]  # Last value is gripper
+            current_gripper_pos = self.read_motor_position(6)
+            
+            if current_gripper_pos is not None and self.config is not None:
+                # Calculate if gripper is closing (moving towards close position)
+                open_position = self.config.servos_calibration_position[-1]
+                close_position = self.config.servos_offsets[-1]
+                
+                # If gripper target is closer to close position than current position, it's closing
+                if (abs(gripper_target - close_position) < abs(current_gripper_pos - close_position) and 
+                    self.check_gripper_resistance()):
+                    logger.info("Gripper resistance detected in group write, excluding gripper from movement")
+                    # Remove gripper from the movement but continue with other motors
+                    values = values[:-1]
+                    motor_names = motor_names[:-1]
+                    enable_gripper = False
 
         # Gripper is the last parameter of q_target (last motor)
         if not enable_gripper:
@@ -537,6 +571,102 @@ class SO100Hardware(BaseManipulator):
 
         self.motors_bus.write("Torque_Enable", 128)
         time.sleep(1)
+
+    def check_gripper_resistance(self) -> bool:
+        """
+        Check if the gripper is experiencing resistance by reading motor current.
+        Returns True if resistance is detected, False otherwise.
+        """
+        if not self.is_connected or self.config is None:
+            return False
+        
+        try:
+            # Read current from gripper motor (servo ID 6)
+            current_torque = self.read_motor_torque(6)
+            if current_torque is None:
+                return False
+            
+            # Use thresholds from config, with fallback values
+            resistance_threshold = getattr(self.config, 'gripping_threshold', 80)
+            
+            # Check if current exceeds threshold indicating resistance
+            return abs(current_torque) > resistance_threshold
+        except Exception as e:
+            logger.warning(f"Error checking gripper resistance: {e}")
+            return False
+
+    def control_gripper(
+        self,
+        open_command: float,  # Should be between 0 and 1
+        **kwargs,
+    ) -> None:
+        """
+        Control the gripper with resistance protection.
+        Overrides base class method to add resistance checking.
+        """
+        if not self.is_connected:
+            return
+            
+        # Get current gripper command value for comparison
+        current_pos = self.read_motor_position(6)
+        if current_pos is not None and self.config is not None:
+            open_position = self.config.servos_calibration_position[-1]
+            close_position = self.config.servos_offsets[-1]
+            current_command_value = ((current_pos - close_position) / (open_position - close_position) 
+                                   if open_position != close_position else 0)
+            current_command_value = np.clip(current_command_value, 0, 1)
+            
+            # If we're trying to close more (open_command < current) and resistance is detected, stop
+            if open_command < current_command_value and self.check_gripper_resistance():
+                logger.info("Gripper resistance detected in control_gripper, stopping closing motion")
+                # Keep current position instead of closing further
+                open_command = current_command_value
+        
+        # Call the write_gripper_command which also has protection
+        self.write_gripper_command(open_command)
+        
+        # Update tracking variables
+        self.closing_gripper_value = open_command
+        self.update_object_gripping_status()
+
+    def write_gripper_command(self, command: float) -> None:
+        """
+        Open or close the gripper with resistance protection.
+        Stops closing if resistance is detected.
+
+        command: 0 to close, 1 to open
+        """
+        if not self.is_connected:
+            return
+        if self.config is None:
+            raise ValueError(
+                "Robot configuration is not set. Run the calibration first."
+            )
+        
+        # Get current gripper position to compare with command
+        current_pos = self.read_motor_position(6)
+        if current_pos is None:
+            return
+        
+        # Since last motor ID might not be equal to the number of motors ( due to some shadowed motors)
+        # We extract last motor calibration data for the gripper:
+        open_position = np.clip(
+            self.config.servos_calibration_position[-1], 0, self.RESOLUTION
+        )
+        close_position = np.clip(self.config.servos_offsets[-1], 0, self.RESOLUTION)
+        target_command = int(close_position + (open_position - close_position) * command)
+        
+        # Resistance protection: only apply resistance check when closing (command < previous command)
+        current_command_value = (current_pos - close_position) / (open_position - close_position) if open_position != close_position else 0
+        
+        # If we're trying to close more (command < current) and resistance is detected, stop
+        if command < current_command_value and self.check_gripper_resistance():
+            logger.info("Gripper resistance detected, stopping closing motion to protect object")
+            return
+        
+        self.write_motor_position(
+            6, np.clip(target_command, 0, self.RESOLUTION)
+        )
 
     async def gravity_compensation_loop(
         self,

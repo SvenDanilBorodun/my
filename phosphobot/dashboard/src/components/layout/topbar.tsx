@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import useSWR from "swr";
 import { motion } from "framer-motion";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const routeMap = [
   { path: "/", title: "Dashboard", subtitle: "System Overview" },
@@ -121,19 +122,17 @@ export function AIControlStatus() {
   }
 
   return (
-    <motion.a
-      href="/inference"
-      className="glass px-3 py-1.5 rounded-xl border border-blue-400/30 bg-blue-50/50 dark:bg-blue-950/20 cursor-pointer hover-lift block"
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-    >
-      <div className="flex items-center gap-2">
+    <motion.div className="glass px-3 py-1.5 rounded-xl border border-blue-400/30 bg-blue-50/50 dark:bg-blue-950/20 cursor-pointer hover-lift block">
+      <Link
+        to="/inference"
+        className="flex items-center gap-2"
+      >
         <BrainCircuit className="size-4 text-blue-600 dark:text-blue-400" />
         <span className="text-xs font-medium text-blue-600 dark:text-blue-400">
           AI
         </span>
-      </div>
-    </motion.a>
+      </Link>
+    </motion.div>
   );
 }
 
@@ -189,7 +188,9 @@ export function AccountTopBar() {
 }
 
 export function TopBar() {
-  const currentPath = window.location.pathname;
+  const location = useLocation();
+  const navigate = useNavigate();
+  const currentPath = location.pathname;
   const { session } = useAuth();
 
   const matchedRoute = routeMap.find(({ path, isPrefix }) =>
@@ -282,9 +283,7 @@ export function TopBar() {
                 <ActionButton
                   variant="ghost"
                   size="sm"
-                  onClick={() => {
-                    window.location.href = "/sign-in";
-                  }}
+                  onClick={() => navigate("/sign-in")}
                 >
                   Sign in
                 </ActionButton>
@@ -292,9 +291,7 @@ export function TopBar() {
                   variant="gradient"
                   size="sm"
                   gradient="blue"
-                  onClick={() => {
-                    window.location.href = "/sign-up";
-                  }}
+                  onClick={() => navigate("/sign-up")}
                   glow
                 >
                   Sign up

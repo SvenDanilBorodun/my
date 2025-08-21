@@ -24,8 +24,10 @@ import { AdminSettings, AdminTokenSettings } from "@/types";
 import { Camera, CircleCheck, Database, Key, Play } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import useSWR from "swr";
+import { useNavigate } from "react-router-dom";
 
 export function AdminPage() {
+  const navigate = useNavigate();
   const [validationErrors, setValidationErrors] = useState<
     Record<string, string>
   >({});
@@ -197,7 +199,7 @@ export function AdminPage() {
               variant="outline"
               onClick={(e) => {
                 e.preventDefault();
-                window.location.href = "/viz";
+                navigate("/viz");
               }}
             >
               <Camera className="size-4 mr-2" />

@@ -57,7 +57,11 @@ class ErrorBoundary extends React.Component<
             </Button>
             <Button
               variant="outline"
-              onClick={() => (window.location.href = "/")}
+              onClick={() => {
+                // Since this is a class component, we need to use window.location but with a proper SPA approach
+                window.history.pushState(null, '', '/');
+                window.location.reload();
+              }}
             >
               <Home className="mr-2 h-4 w-4" />
               Back to Dashboard
