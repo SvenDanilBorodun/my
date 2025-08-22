@@ -37,8 +37,8 @@ from phosphobot.utils import background_task_log_exceptions, get_hf_token
 # Code from: https://github.com/NVIDIA/Isaac-GR00T/blob/main/gr00t/eval/service.py#L111
 
 
-class TorchSerializer:
-    # TODO: Rename as PickleSerializer
+class PickleSerializer:
+    # TODO: Renamed from TorchSerializer to reflect actual pickle usage
 
     @staticmethod
     def to_bytes(data: dict) -> bytes:
@@ -111,7 +111,7 @@ class BaseInferenceServer:
         while self.running:
             raw = self.socket.recv()
             try:
-                request = TorchSerializer.from_bytes(raw)
+                request = PickleSerializer.from_bytes(raw)
                 version = request.get("version", 1)
                 use_envelope = version >= 2
 
@@ -127,10 +127,10 @@ class BaseInferenceServer:
 
                 if use_envelope:
                     resp: Dict[str, Any] = {"status": "ok", "result": result}
-                    self.socket.send(TorchSerializer.to_bytes(resp))
+                    self.socket.send(PickleSerializer.to_bytes(resp))
                 else:
                     # legacy: send the bare result dict
-                    self.socket.send(TorchSerializer.to_bytes(result))
+                    self.socket.send(PickleSerializer.to_bytes(result))
 
             except Exception as e:
                 tb = traceback.format_exc()
@@ -144,7 +144,7 @@ class BaseInferenceServer:
                         # omit traceback if you don't want to expose internals
                         "traceback": tb,
                     }
-                    self.socket.send(TorchSerializer.to_bytes(error_resp))
+                    self.socket.send(PickleSerializer.to_bytes(error_resp))
                 else:
                     # legacy client: single-byte ERROR token
                     self.socket.send(b"ERROR")
@@ -245,7 +245,7 @@ class BaseInferenceClient:
         if requires_input:
             request["data"] = data or {}
 
-        self.socket.send(TorchSerializer.to_bytes(request))
+        self.socket.send(PickleSerializer.to_bytes(request))
         raw = self.socket.recv()
 
         # legacy error token
@@ -253,7 +253,7 @@ class BaseInferenceClient:
             raise RuntimeError("Server error (legacy)")
 
         # decode envelope or raw result
-        resp = TorchSerializer.from_bytes(raw)
+        resp = PickleSerializer.from_bytes(raw)
         if "status" in resp:
             if resp["status"] == "error":
                 et, msg = resp.get("error_type", "Error"), resp.get("message", "")
@@ -711,7 +711,7 @@ class Gr00tN1(ActionModel):
         fps: int = 30,
         speed: float = 1.0,
         cameras_keys_mapping: Dict[str, int] | None = None,
-        angle_format: Literal["degrees", "radians", "other"] = "radians",
+        unit: Literal["degrees", "rad", "other"] = "rad",
         min_angle: float | None = None,
         max_angle: float | None = None,
         **kwargs: Any,
@@ -726,11 +726,6 @@ class Gr00tN1(ActionModel):
         nb_iter = 0
         config = model_spawn_config.hf_model_config
         signal_marked_as_started = False
-        unit: Literal["degrees", "rad", "other"]
-        if angle_format != "radians":
-            unit = angle_format
-        else:
-            unit = "rad"
 
         while control_signal.is_in_loop():
             logger.debug(
@@ -866,7 +861,7 @@ class Gr00tN1(ActionModel):
                             (target_position - current_position + 180) % 360 - 180
                         )
 
-                    elif unit == "radians":
+                    elif unit == "rad":
                         # The last joint is the gripper, which can open/close
                         max_transition_angles = np.array([np.pi / 2] * 5 + [np.pi])
                         current_to_target_diff = np.abs(
@@ -1158,9 +1153,42 @@ async def run_gr00t_training(
             # No timeout
             await read_output()
         else:
-            # Timeout
-            await asyncio.wait_for(read_output(), timeout=timeout_seconds)
+            # Race reader task against process termination with timeout
+            reader_task = asyncio.create_task(read_output())
+            process_task = asyncio.create_task(process.wait())
+            
+            done, pending = await asyncio.wait(
+                [reader_task, process_task], 
+                return_when=asyncio.FIRST_COMPLETED,
+                timeout=timeout_seconds
+            )
+            
+            # Check if timeout occurred
+            if not done:
+                # Timeout occurred, kill process
+                process.kill()
+                # Cancel pending tasks
+                for task in pending:
+                    task.cancel()
+                # Wait for process cleanup
+                await process.wait()
+                logger.error(f"Training process timed out after {timeout_seconds} seconds.")
+                raise TimeoutError(
+                    f"Training process exceeded timeout of {timeout_seconds} seconds. Please consider lowering the number of epochs and/or batch size."
+                )
+            
+            # Cancel any remaining tasks
+            for task in pending:
+                task.cancel()
+            
+            # Ensure reader task completes to capture all output
+            if reader_task not in done:
+                try:
+                    await reader_task
+                except asyncio.CancelledError:
+                    pass
     except asyncio.TimeoutError:
+        # This should not happen with the new approach, but keep for safety
         process.kill()
         await process.wait()
         logger.error(f"Training process timed out after {timeout_seconds} seconds.")

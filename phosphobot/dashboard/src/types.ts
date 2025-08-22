@@ -18,6 +18,7 @@ export type SingleCameraStatus = {
     | "realsense"
     | "dummy"
     | "dummy_stereo"
+    | "zmq"
     | "unknown";
   width: number;
   height: number;
@@ -125,6 +126,7 @@ export type AdminSettings = {
   video_size: [number, number];
   task_instruction: string;
   cameras_to_record: number[] | null;
+  hf_private_mode: boolean;
 };
 
 export type AIStatusResponse = {

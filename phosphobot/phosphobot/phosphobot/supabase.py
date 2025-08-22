@@ -3,10 +3,10 @@ import json
 import time
 
 from fastapi import HTTPException
-from gotrue.errors import AuthRetryableError
 from loguru import logger
 from supabase import AsyncClient, acreate_client
-from gotrue.types import Session as GotrueSession
+from supabase_auth.types import Session as SupabaseSession
+from supabase_auth.errors import AuthRetryableError
 
 from phosphobot.models import Session
 from phosphobot.utils import get_home_app_path, get_tokens
@@ -87,13 +87,16 @@ async def get_client() -> AsyncClient:
             except AuthRetryableError as e:
                 if attempt < max_retries - 1:
                     logger.warning(
-                        f"Retryable error: {e}. Retrying in {delay} seconds..."
+                        f"Retryable error: {e}. Retrying in {current_delay} seconds..."
                     )
                     await asyncio.sleep(current_delay)
                     current_delay += delay
                 else:
                     logger.error(f"Failed after {max_retries} attempts: {e}")
                     return False
+            except Exception as e:
+                logger.error(f"Non-retryable error during session setup: {e}")
+                return False
 
     if session:
         if (
@@ -147,7 +150,7 @@ async def get_client() -> AsyncClient:
     return client
 
 
-async def user_is_logged_in() -> GotrueSession:
+async def user_is_logged_in() -> SupabaseSession:
     """
     Check if the user is logged in. If not, raise HTTPException with status code 401.
     """

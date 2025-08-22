@@ -1,5 +1,6 @@
 import asyncio
 import json
+import traceback
 from copy import copy
 from typing import cast
 
@@ -691,7 +692,7 @@ async def read_joints(
     Read joint position.
     """
     if request is None:
-        request = JointsReadRequest(unit="rad", joints_ids=None)
+        request = JointsReadRequest(unit="rad", joints_ids=None, source="robot")
 
     robot = await rcm.get_robot(robot_id)
 
@@ -702,7 +703,7 @@ async def read_joints(
         )
 
     current_units_position = robot.read_joints_position(
-        unit=request.unit, joints_ids=request.joints_ids
+        unit=request.unit, joints_ids=request.joints_ids, source=request.source
     )
     # Replace NaN values with None and convert to list
     current_units_position = [
@@ -1000,9 +1001,9 @@ async def spawn_inference_server(
             )
             robots_to_control.remove(robot)
 
-    assert all(isinstance(robot, BaseManipulator) for robot in robots_to_control), (
-        "All robots must be manipulators for AI control"
-    )
+    assert all(
+        isinstance(robot, BaseManipulator) for robot in robots_to_control
+    ), "All robots must be manipulators for AI control"
 
     # Get the modal host and port here
     _, _, server_info = await setup_ai_control(
@@ -1092,9 +1093,9 @@ async def start_ai_control(
             )
             robots_to_control.remove(robot)
 
-    assert all(isinstance(robot, BaseManipulator) for robot in robots_to_control), (
-        "All robots must be manipulators for AI control"
-    )
+    assert all(
+        isinstance(robot, BaseManipulator) for robot in robots_to_control
+    ), "All robots must be manipulators for AI control"
 
     # Get the modal host and port here
     model, model_spawn_config, server_info = await setup_ai_control(
@@ -1265,7 +1266,7 @@ async def add_robot_connection(
             status="ok", message=f"Robot connection to {query.robot_name} added"
         )
     except Exception as e:
-        logger.error(f"Failed to add robot connection: {e}")
+        logger.error(f"Failed to add robot connection: {e}\n{traceback.format_exc()}")
         raise HTTPException(
             status_code=400, detail=f"Failed to add robot connection: {e}"
         )

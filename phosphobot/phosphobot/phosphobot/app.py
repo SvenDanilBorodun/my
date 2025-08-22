@@ -71,6 +71,15 @@ async def lifespan(app: FastAPI):
     sim = get_sim()
     # Initialize rcm
     rcm = get_rcm()
+    
+    # Initialize recorder and store in app.state
+    robots = await rcm.robots
+    cameras = get_all_cameras()
+    app.state.recorder = Recorder(
+        robots=robots,
+        cameras=cameras,
+    )
+    logger.info("Recorder initialized and stored in app.state")
 
     try:
         login_to_hf()
@@ -105,6 +114,11 @@ async def lifespan(app: FastAPI):
         if cameras:
             cameras.stop()
 
+        # Cleanup recorder
+        if hasattr(app.state, 'recorder') and app.state.recorder:
+            await app.state.recorder.cleanup()
+            logger.info("Recorder cleaned up")
+        
         # Cleanup the simulation environment
         del rcm
         del sim

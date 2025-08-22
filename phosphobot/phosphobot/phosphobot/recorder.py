@@ -5,7 +5,7 @@ from concurrent.futures import ThreadPoolExecutor
 from typing import Literal, Optional, List
 
 import numpy as np
-from fastapi import BackgroundTasks, Depends
+from fastapi import BackgroundTasks, Depends, Request
 from loguru import logger
 
 from phosphobot.camera import AllCameras, get_all_cameras
@@ -25,7 +25,7 @@ from phosphobot.types import VideoCodecs
 from phosphobot.utils import background_task_log_exceptions, get_home_app_path
 from phosphobot.rerun_visualizer import RerunVisualizer
 
-recorder = None  # Global variable to store the recorder instance
+# Recorder is now initialized in app startup and stored in app.state
 
 
 class Recorder:
@@ -62,13 +62,17 @@ class Recorder:
         self.cameras = cameras
         self.rerun_visualizer = RerunVisualizer()
 
-        # Initialize thread pools for performance optimization
-        self._max_image_workers = max(
-            4, len(cameras.camera_ids)
-        )  # At least one per camera
-        self._max_robot_workers = max(
-            2, len(robots)
-        )  # Adaptive based on robot count
+        # Initialize thread pools for performance optimization with caps
+        MAX_IMAGE_WORKERS = 8
+        MAX_ROBOT_WORKERS = 4
+        
+        self._max_image_workers = min(
+            MAX_IMAGE_WORKERS, max(1, len(cameras.camera_ids))
+        )  # At least 1, capped at MAX_IMAGE_WORKERS
+        self._max_robot_workers = min(
+            MAX_ROBOT_WORKERS, max(1, len(robots) + 1)
+        )  # At least 1, capped at MAX_ROBOT_WORKERS
+
         self._image_thread_pool = ThreadPoolExecutor(
             max_workers=self._max_image_workers, thread_name_prefix="recorder_images"
         )
@@ -222,30 +226,32 @@ class Recorder:
             f"Starting to save episode for dataset '{dataset_name_for_log}' (format: {episode_format_for_log})..."
         )
 
+        save_succeeded = False
         try:
             await episode_to_save.save()  # The episode handles all its saving logic
+            save_succeeded = True
+            self.episode = None  # Clear episode after successful save
             logger.success(
                 f"Episode saved successfully for dataset '{dataset_name_for_log}'."
             )
 
         except Exception as e:
             logger.error(f"An error occurred during episode saving: {e}", exc_info=True)
-            # Depending on the severity, you might not want to clear self.episode here,
-            # to allow for a retry or manual inspection. For now, it's cleared in finally.
+            # Keep episode for retry/inspection on failure
             raise  # Re-throw for higher level handling if necessary
         finally:
             self.is_saving = False
-            # self.episode = None # Clear episode if not cleared on success (e.g. if push fails but save was ok)
+            # Only clear episode if save succeeded (already cleared above on success)
 
-        if self.use_push_to_hf and isinstance(self.episode, LeRobotEpisode):
-            self.push_to_hub(
-                dataset_path=str(self.episode.dataset_path),
+        if self.use_push_to_hf and isinstance(episode_to_save, LeRobotEpisode):
+            await self.push_to_hub(
+                dataset_path=str(episode_to_save.dataset_path),
                 branch_path=self.branch_path,
             )
 
         return None
 
-    def push_to_hub(self, dataset_path: str, branch_path: str | None = None) -> None:
+    async def push_to_hub(self, dataset_path: str, branch_path: str | None = None) -> None:
         logger.info(
             f"Attempting to push dataset from {dataset_path} to Hugging Face Hub. Branch: {branch_path or 'main'}"
         )
@@ -253,7 +259,9 @@ class Recorder:
             # Dataset class needs to be robust enough to be initialized with the full path
             # e.g., "recordings/lerobot_v2.1/my_dataset_name"
             dataset_obj = BaseDataset(path=dataset_path)
-            dataset_obj.push_dataset_to_hub(branch_path=branch_path)
+            # Run synchronous push_dataset_to_hub in thread pool to avoid blocking
+            loop = asyncio.get_event_loop()
+            await loop.run_in_executor(None, dataset_obj.push_dataset_to_hub, branch_path)
             logger.success(
                 f"Successfully pushed dataset {dataset_path} to Hugging Face Hub."
             )
@@ -531,16 +539,9 @@ class Recorder:
 
 
 async def get_recorder(
-    rcm: RobotConnectionManager = Depends(get_rcm),
+    request: Request,
 ) -> Recorder:
-    global recorder
-    if recorder is not None:
-        return recorder
-    else:
-        robots = await rcm.robots
-        cameras = get_all_cameras()
-        recorder = Recorder(
-            robots=robots,  # type: ignore
-            cameras=cameras,
-        )
-        return recorder
+    """Get the recorder from app.state, initialized during startup."""
+    if not hasattr(request.app.state, 'recorder') or request.app.state.recorder is None:
+        raise RuntimeError("Recorder not initialized. This should be initialized during app startup.")
+    return request.app.state.recorder

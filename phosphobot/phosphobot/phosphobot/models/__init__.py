@@ -312,6 +312,10 @@ class JointsReadRequest(BaseModel):
         None,
         description="If set, only read the joints with these ids. If None, read all joints.",
     )
+    source: Literal["sim", "robot"] = Field(
+        "robot",
+        description="Source of the joint angles. 'sim' means the angles are read from the simulation, 'robot' means the angles are read from the hardware.",
+    )
 
 
 class JointsWriteRequest(BaseModel):
@@ -758,6 +762,7 @@ class AdminSettingsRequest(BaseModel):
     video_size: List[int]  # size 2
     task_instruction: str
     cameras_to_record: List[int] | None = None
+    hf_private_mode: bool = False
 
 
 class AdminSettingsResponse(BaseModel):
@@ -772,6 +777,7 @@ class AdminSettingsResponse(BaseModel):
     video_size: List[int]  # size 2
     task_instruction: str
     cameras_to_record: List[int] | None
+    hf_private_mode: bool
 
 
 class AdminSettingsTokenResponse(BaseModel):
@@ -887,10 +893,10 @@ class StartAIControlRequest(BaseModel):
         description="Checkpoint to use for the model. If None, uses the latest checkpoint.",
         examples=[500],
     )
-    angle_format: Literal["degrees", "radians", "other"] = Field(
-        "radians",
+    angle_format: Literal["degrees", "rad", "other"] = Field(
+        "rad",
         description="Format of the angles used in the model. Can be 'degrees', 'radians', or 'other'. If other is selected, you will need to specify a min and max angle value.",
-        examples=["radians"],
+        examples=["rad"],
     )
     min_angle: float | None = Field(
         None,
@@ -1004,6 +1010,7 @@ class SessionReponse(BaseModel):
 class AuthResponse(BaseModel):
     authenticated: bool
     session: Session | None = None
+    is_pro_user: bool | None = None
 
 
 class FeedbackRequest(BaseModel):
@@ -1159,4 +1166,17 @@ class RobotConnectionRequest(BaseModel):
     connection_details: dict[str, Any] = Field(
         ...,
         description="Connection details for the robot. These are passed to the class constructor. This can include IP address, port, and other connection parameters.",
+    )
+
+
+class AddZMQCameraRequest(BaseModel):
+    """
+    Request model for adding a ZMQ camera feed.
+    """
+
+    tcp_address: str = Field(
+        ...,
+        description="TCP address of the ZMQ publisher. "
+        + "Format: 'tcp://<host>:<port>'.",
+        examples=["tcp://localhost:5555"],
     )

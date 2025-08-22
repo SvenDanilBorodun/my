@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useGlobalStore } from "@/lib/hooks";
 import { fetchWithBaseUrl, fetcher } from "@/lib/utils";
 import { Loader2, TrafficCone } from "lucide-react";
 import { useState } from "react";
@@ -60,7 +61,6 @@ const ROBOT_TYPES = [
     image: placeholderSvg,
     fields: [{ name: "device_name", label: "USB Port", type: "device_name" }],
   },
-
   {
     id: "lekiwi",
     name: "LeKiwi",
@@ -69,6 +69,25 @@ const ROBOT_TYPES = [
     fields: [
       { name: "ip", label: "IP Address", type: "ip" },
       { name: "port", label: "Port", type: "number", default: 5555 },
+    ],
+  },
+  {
+    id: "urdf_loader",
+    name: "URDF loader",
+    category: "manipulator",
+    image: placeholderSvg,
+    fields: [
+      { name: "urdf_path", label: "URDF Path", type: "urdf_path" },
+      {
+        name: "end_effector_link_index",
+        label: "End Effector Link Index",
+        type: "number",
+      },
+      {
+        name: "gripper_joint_index",
+        label: "Gripper Joint Index",
+        type: "number",
+      },
     ],
   },
 ];
@@ -107,6 +126,17 @@ export function RobotConfigModal({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [formValues, setFormValues] = useState<Record<string, any>>({});
 
+  const {
+    urdfPath,
+    setUrdfPath,
+    urdfPathHistory,
+    addUrdfPathToHistory,
+    endEffectorLinkIndex,
+    setEndEffectorLinkIndex,
+    gripperJointIndex,
+    setGripperJointIndex,
+  } = useGlobalStore();
+
   const selectedRobot = ROBOT_TYPES.find(
     (robot) => robot.id === selectedRobotType,
   );
@@ -132,6 +162,15 @@ export function RobotConfigModal({
         (acc, field) => {
           if (field.default !== undefined) {
             acc[field.name] = field.default;
+          } else if (field.name === "urdf_path" && urdfPath) {
+            // Pre-populate URDF path from store
+            acc[field.name] = urdfPath;
+          } else if (field.name === "end_effector_link_index") {
+            // Pre-populate end effector link index from store
+            acc[field.name] = endEffectorLinkIndex;
+          } else if (field.name === "gripper_joint_index") {
+            // Pre-populate gripper joint index from store
+            acc[field.name] = gripperJointIndex;
           }
           return acc;
         },
@@ -150,6 +189,17 @@ export function RobotConfigModal({
       ...prev,
       [fieldName]: value,
     }));
+
+    // Also persist to store for specific fields
+    if (fieldName === "end_effector_link_index") {
+      const parsed = parseInt(value, 10);
+      const safe = Number.isNaN(parsed) ? 1 : Math.max(0, parsed);
+      setEndEffectorLinkIndex(safe);
+    } else if (fieldName === "gripper_joint_index") {
+      const parsed = parseInt(value, 10);
+      const safe = Number.isNaN(parsed) ? 1 : Math.max(0, parsed);
+      setGripperJointIndex(safe);
+    }
   };
 
   const handleSubmit = async () => {
@@ -210,6 +260,11 @@ export function RobotConfigModal({
         toast.success(
           `${selectedRobot.name} robot has been added successfully.`,
         );
+
+        // Add URDF path to history if it's a URDF loader
+        if (selectedRobotType === "urdf_loader" && urdfPath) {
+          addUrdfPathToHistory(urdfPath);
+        }
 
         // Close modal on success
         onOpenChange(false);
@@ -345,6 +400,28 @@ export function RobotConfigModal({
                       isLoading={isLoadingUsb}
                       placeholder="Select USB port"
                       emptyMessage="No USB ports detected"
+                      allowCustomValue={true}
+                    />
+                  )}
+
+                  {field.type === "urdf_path" && (
+                    <AutoComplete
+                      options={urdfPathHistory.map((path) => ({
+                        value: path,
+                        label: path,
+                      }))}
+                      value={
+                        urdfPath
+                          ? { value: urdfPath, label: urdfPath }
+                          : null
+                      }
+                      onValueChange={(option) => {
+                        const path = option?.value;
+                        setUrdfPath(path || "");
+                        handleFieldChange(field.name, path || "");
+                      }}
+                      placeholder="Enter or select URDF path"
+                      emptyMessage="No recent URDF paths"
                       allowCustomValue={true}
                     />
                   )}
