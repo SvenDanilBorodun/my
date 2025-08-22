@@ -1,12 +1,10 @@
 "use client";
 
-import SubscribeButton from "./subscribe-button";
-
 interface PricingCardProps {
-  userEmail: string | null;
+  userEmail?: string | null;
 }
 
-export default function CommunityCard({ userEmail }: PricingCardProps) {
+export default function CommunityCard({ }: PricingCardProps) {
   return (
     <div className="bg-white rounded-lg shadow-[0_10px_15px_rgba(0,0,0,0.1)] p-6 sm:p-8 max-w-sm mx-auto lg:mx-0 lg:ml-8">
       <h2 className="text-2xl sm:text-4xl font-headline text-gray-900 mb-2">
@@ -24,7 +22,7 @@ export default function CommunityCard({ userEmail }: PricingCardProps) {
         </div>
       </div>
       <button 
-        onClick={() => window.open('https://discord.gg/cbkggY6NSK', '_blank')}
+        onClick={() => window.open('https://discord.gg', '_blank')}
         className="w-full bg-primary-blue hover:bg-primary-blue-dark text-white font-semibold py-3 px-6 rounded-lg transition-colors"
       >
         Join Discord Community
