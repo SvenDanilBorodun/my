@@ -591,7 +591,7 @@ export function BrowsePage() {
         <Button 
           variant="outline" 
           onClick={() => setOpenDownloadModal(true)}
-          className="glass border-blue-200/50 hover:bg-blue-50 dark:hover:bg-blue-950/20 transition-all duration-200"
+          className="glass border-blue-200/50 bg-gradient-to-r from-blue-50/20 to-blue-100/10 dark:from-blue-950/10 dark:to-blue-900/5 hover:from-blue-100/30 hover:to-blue-200/20 dark:hover:from-blue-900/20 dark:hover:to-blue-800/10 transition-all duration-200 hover-lift"
         >
           <Plus className="mr-2 h-4 w-4" />
           Add dataset from hub 🤗
@@ -604,7 +604,7 @@ export function BrowsePage() {
           <AlertDescription>{data.tokenError}</AlertDescription>
         </Alert>
       )}
-      <div className="glass border-blue-200/30 bg-gradient-to-br from-blue-50/20 to-blue-100/10 dark:from-blue-950/10 dark:to-blue-900/5 rounded-xl overflow-hidden">
+      <div className="glass border-blue-200/30 bg-gradient-to-br from-blue-50/20 to-blue-100/10 dark:from-blue-950/10 dark:to-blue-900/5 rounded-2xl overflow-hidden backdrop-blur-lg">
         <Table>
           <TableHeader>
             <TableRow className="border-blue-200/30 hover:bg-blue-50/30 dark:hover:bg-blue-950/10">
@@ -803,7 +803,7 @@ export function BrowsePage() {
                 if (!selectedEpisode) return;
                 setConfirmEpisodeDeleteOpen(true);
               }}
-              className="hover:shadow-lg transition-all duration-200"
+              className="glass border-red-200/30 bg-gradient-to-r from-red-50/20 to-red-100/10 dark:from-red-950/10 dark:to-red-900/5 hover:from-red-100/30 hover:to-red-200/20 dark:hover:from-red-900/20 dark:hover:to-red-800/10 hover:shadow-lg transition-all duration-200 hover-lift"
             >
               <Trash2 className="mr-2 h-4 w-3" />
               Delete Episode
@@ -811,7 +811,7 @@ export function BrowsePage() {
             {isRobotConnected && (
               <Button
                 type="button"
-                className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+                className="glass border-green-200/30 bg-gradient-to-r from-green-500/90 to-green-600/90 hover:from-green-600 hover:to-green-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 hover-lift backdrop-blur-lg"
                 onClick={async () => {
                   await handleReplayEpisode();
                 }}

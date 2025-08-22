@@ -124,7 +124,7 @@ export const CameraStreamCard = ({
   };
 
   return (
-    <Card className="overflow-hidden">
+    <Card className="overflow-hidden glass border-blue-200/30 bg-gradient-to-br from-blue-50/20 to-blue-100/10 dark:from-blue-950/10 dark:to-blue-900/5 rounded-2xl backdrop-blur-lg hover-lift">
       {title !== "" && (
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl flex items-center gap-2">
@@ -146,7 +146,7 @@ export const CameraStreamCard = ({
         <div className="flex items-center gap-2">
           <Badge
             variant="outline"
-            className="hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="glass border-blue-200/30 bg-gradient-to-r from-blue-50/20 to-blue-100/10 dark:from-blue-950/10 dark:to-blue-900/5 hover:from-blue-100/30 hover:to-blue-200/20 dark:hover:from-blue-900/20 dark:hover:to-blue-800/10 transition-all duration-200 cursor-pointer"
             onClick={toggleQuality}
           >
             Preview:{" "}

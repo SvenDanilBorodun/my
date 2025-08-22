@@ -1,5 +1,5 @@
 import { HuggingFaceKeyInput } from "@/components/common/huggingface-key";
-import { LoadingPage } from "@/components/common/loading";
+// Simple loading component inline
 import { WandBKeyInput } from "@/components/common/wandb-key";
 import { Button } from "@/components/ui/button";
 import {
@@ -106,7 +106,7 @@ export function AdminPage() {
     mutate({ ...adminSettings, [key]: value }, false);
   };
 
-  if (!adminSettings) return <LoadingPage />;
+  if (!adminSettings) return <div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div></div>;
 
   return (
     <div className="mb-8">

@@ -238,8 +238,8 @@ function AIModelsCard() {
         </div>
       </GlassCard>
       <Dialog open={showWarning} onOpenChange={setShowWarning}>
-        <DialogContent className="sm:max-w-md border-amber-300 border">
-          <DialogHeader className="bg-amber-50 dark:bg-amber-950/20 p-4 -m-4 rounded-t-lg">
+        <DialogContent className="sm:max-w-md glass border-amber-200/30 bg-gradient-to-br from-amber-50/20 to-orange-100/10 dark:from-amber-950/10 dark:to-orange-900/5">
+          <DialogHeader className="glass bg-gradient-to-r from-amber-50/30 to-orange-50/20 dark:from-amber-950/20 dark:to-orange-950/10 p-4 -m-4 rounded-t-xl backdrop-blur-lg">
             <div className="flex items-center gap-2 mb-2">
               <AlertTriangle className="size-16 text-red-500 mr-2" />
               <DialogTitle className="text-bold font-bold tracking-tight">
@@ -255,11 +255,15 @@ function AIModelsCard() {
             <Button
               variant="outline"
               onClick={() => setShowWarning(false)}
-              className="border-gray-200 hover:bg-gray-50"
+              className="glass border-gray-200/30 bg-gradient-to-r from-gray-50/20 to-gray-100/10 dark:from-gray-950/10 dark:to-gray-900/5 hover:from-gray-100/30 hover:to-gray-200/20 dark:hover:from-gray-900/20 dark:hover:to-gray-800/10 transition-all duration-200"
             >
               Cancel
             </Button>
-            <Button variant="default" onClick={onProceed}>
+            <Button 
+              variant="default" 
+              onClick={onProceed}
+              className="glass bg-gradient-to-r from-blue-500/90 to-blue-600/90 hover:from-blue-600 hover:to-blue-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 hover-lift backdrop-blur-lg"
+            >
               I Understand the Risks
             </Button>
           </DialogFooter>

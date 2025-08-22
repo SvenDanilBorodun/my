@@ -1,6 +1,6 @@
 "use client";
 
-import placeholderSvg from "@/assets/placeholder.svg";
+// Removed placeholder import - now using proper robotics iconography
 import { AutoComplete } from "@/components/common/autocomplete";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,13 +27,14 @@ import { useState } from "react";
 import { toast } from "sonner";
 import useSWR, { mutate } from "swr";
 
-// Data model for robot types
+// Data model for robot types with proper robotics iconography
 const ROBOT_TYPES = [
   {
     id: "phosphobot",
     name: "Remote phosphobot server",
     category: "manipulator",
-    image: placeholderSvg,
+    icon: "🤖",
+    color: "from-blue-500 to-blue-600",
     fields: [
       { name: "ip", label: "IP Address", type: "ip" },
       { name: "port", label: "Port", type: "number", default: 80 },
@@ -44,28 +45,32 @@ const ROBOT_TYPES = [
     id: "unitree-go2",
     name: "Unitree Go2",
     category: "mobile",
-    image: placeholderSvg,
+    icon: "🐕",
+    color: "from-amber-500 to-orange-600",
     fields: [{ name: "ip", label: "IP Address", type: "ip" }],
   },
   {
     id: "so-100",
     name: "SO-100 / SO-101",
     category: "manipulator",
-    image: placeholderSvg,
+    icon: "🦾",
+    color: "from-emerald-500 to-green-600",
     fields: [{ name: "device_name", label: "USB Port", type: "device_name" }],
   },
   {
     id: "koch-v1.1",
     name: "Koch 1.1",
     category: "manipulator",
-    image: placeholderSvg,
+    icon: "🦿",
+    color: "from-purple-500 to-violet-600",
     fields: [{ name: "device_name", label: "USB Port", type: "device_name" }],
   },
   {
     id: "lekiwi",
     name: "LeKiwi",
     category: "mobile",
-    image: placeholderSvg,
+    icon: "🚀",
+    color: "from-cyan-500 to-blue-600",
     fields: [
       { name: "ip", label: "IP Address", type: "ip" },
       { name: "port", label: "Port", type: "number", default: 5555 },
@@ -75,7 +80,8 @@ const ROBOT_TYPES = [
     id: "urdf_loader",
     name: "URDF loader",
     category: "manipulator",
-    image: placeholderSvg,
+    icon: "⚙️",
+    color: "from-slate-500 to-gray-600",
     fields: [
       { name: "urdf_path", label: "URDF Path", type: "urdf_path" },
       {
@@ -285,7 +291,7 @@ export function RobotConfigModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-[600px] glass border-blue-200/30 bg-gradient-to-br from-blue-50/20 to-blue-100/10 dark:from-blue-950/10 dark:to-blue-900/5">
         <DialogHeader>
           <DialogTitle>Connect to another robot</DialogTitle>
           <DialogDescription className="flex flex-col gap-y-2">
@@ -293,7 +299,7 @@ export function RobotConfigModal({
               Manually connect to a robot by selecting its type and entering the
               connection details.
             </div>
-            <div className="border border-destructive bg-destructive/10 text-destructive rounded-md p-2">
+            <div className="glass border-amber-200/30 bg-gradient-to-br from-amber-50/20 to-orange-100/10 dark:from-amber-950/10 dark:to-orange-900/5 text-amber-700 dark:text-amber-300 rounded-xl p-3">
               <TrafficCone className="inline mr-2 size-6" />
               This feature is experimental and may not work as expected. Please
               report any issue you encounter{" "}
@@ -331,12 +337,8 @@ export function RobotConfigModal({
 
             {selectedRobot && (
               <div className="flex flex-col items-center justify-center">
-                <div className="relative h-[120px] w-[120px] rounded-md border overflow-hidden">
-                  <img
-                    src={selectedRobot.image || "/placeholder.svg"}
-                    alt={selectedRobot.name}
-                    className="object-cover w-[120px] h-[120px]"
-                  />
+                <div className={`relative h-[120px] w-[120px] rounded-2xl glass overflow-hidden bg-gradient-to-br ${selectedRobot.color} backdrop-blur-lg flex items-center justify-center`}>
+                  <div className="text-6xl">{selectedRobot.icon}</div>
                 </div>
                 <span className="text-xs text-muted-foreground mt-1">
                   {selectedRobot.category === "mobile"
@@ -413,7 +415,7 @@ export function RobotConfigModal({
                       value={
                         urdfPath
                           ? { value: urdfPath, label: urdfPath }
-                          : null
+                          : undefined
                       }
                       onValueChange={(option) => {
                         const path = option?.value;
