@@ -383,7 +383,7 @@ export function AIControlPage() {
                     value={selectedAngleFormat}
                     onValueChange={setSelectedAngleFormat}
                   >
-                    <ToggleGroupItem value="radians" className="flex-none">
+                    <ToggleGroupItem value="rad" className="flex-none">
                       <div className="flex items-center w-full">
                         <TestTubeDiagonal className="mr-1 h-4 w-4 text-blue-600" />
                         Radians (default)
@@ -670,11 +670,11 @@ export function AIControlPage() {
 
                 <div className="text-sm text-center mt-4 p-3 rounded-lg bg-white/50 dark:bg-black/20">
                   <p className="font-medium">
-                    {aiStatus?.status === "stopped"
+                  {aiStatus?.status === "stopped"
                       ? "🤖 Ready to start AI control"
-                      : aiStatus?.status === "paused"
+                    : aiStatus?.status === "paused"
                         ? "⏸️ AI execution paused"
-                        : aiStatus?.status === "waiting"
+                      : aiStatus?.status === "waiting"
                           ? "⏳ AI getting ready, please don't refresh the page, this can take up to a minute..."
                           : "🎯 AI actively controlling robot"}
                   </p>

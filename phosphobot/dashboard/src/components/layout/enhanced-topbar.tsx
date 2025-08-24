@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/tooltip";
 import { useAuth } from "@/context/AuthContext";
 import { fetcher } from "@/lib/utils";
+import { useNavigate } from "react-router-dom";
 import { ServerStatus } from "@/types";
 import {
   BookText,
@@ -149,6 +150,7 @@ export function AIControlStatus() {
   const { data: serverStatus } = useSWR<ServerStatus>(["/status"], ([url]) =>
     fetcher(url),
   );
+  const navigate = useNavigate();
 
   if (!serverStatus || serverStatus.ai_running_status !== "running") {
     return null;
@@ -158,8 +160,8 @@ export function AIControlStatus() {
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <motion.a
-            href="/inference"
+          <motion.div
+            onClick={() => navigate("/inference")}
             className="glass-enhanced px-3 py-1.5 rounded-xl border border-blue-400/30 bg-blue-50/50 dark:bg-blue-950/20 cursor-pointer hover-lift block"
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.95 }}
@@ -179,7 +181,7 @@ export function AIControlStatus() {
                 AI
               </span>
             </div>
-          </motion.a>
+          </motion.div>
         </TooltipTrigger>
         <TooltipContent>
           <div className="flex items-center gap-2">
@@ -249,6 +251,7 @@ export function AccountTopBar() {
 export function EnhancedTopBar() {
   const currentPath = window.location.pathname;
   const { session } = useAuth();
+  const navigate = useNavigate();
 
   const matchedRoute = routeMap.find(({ path, isPrefix }) =>
     isPrefix ? currentPath.startsWith(path) : currentPath === path,
@@ -373,7 +376,7 @@ export function EnhancedTopBar() {
                     variant="ghost"
                     size="sm"
                     onClick={() => {
-                      window.location.href = "/sign-in";
+                      navigate("/sign-in");
                     }}
                   >
                     Sign in
@@ -385,7 +388,7 @@ export function EnhancedTopBar() {
                     size="sm"
                     gradient="blue"
                     onClick={() => {
-                      window.location.href = "/sign-up";
+                      navigate("/sign-up");
                     }}
                     glow
                   >

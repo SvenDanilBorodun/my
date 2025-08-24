@@ -3,7 +3,7 @@
 import * as React from "react"
 import { motion } from "framer-motion"
 import { Home, Play, Dumbbell, BrainCircuit, FolderOpen, Settings } from "lucide-react"
-import { useLocation } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { cn } from "@/lib/utils"
 
 interface TabItem {
@@ -101,6 +101,7 @@ const tabItems: TabItem[] = [
 
 export function EnhancedMenuBar({ className }: EnhancedMenuBarProps) {
   const location = useLocation()
+  const navigate = useNavigate()
   const currentPath = location.pathname
   const [hoveredIndex, setHoveredIndex] = React.useState<number | null>(null)
   const [hoverStyle, setHoverStyle] = React.useState({})
@@ -164,7 +165,7 @@ export function EnhancedMenuBar({ className }: EnhancedMenuBarProps) {
   }, [activeIndex])
 
   const handleTabClick = (href: string) => {
-    window.location.href = href
+    navigate(href)
   }
 
   return (
