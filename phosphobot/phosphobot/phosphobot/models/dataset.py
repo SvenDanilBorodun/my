@@ -474,7 +474,7 @@ class BaseDataset:
             logger.warning(
                 "Dataset name contains invalid characters. Replacing them with underscores."
             )
-            name = name.replace(" ", "_").replace("/", "_").replace("-", "_")
+            name.replace(" ", "_").replace("/", "_").replace("-", "_")
 
         return name
 

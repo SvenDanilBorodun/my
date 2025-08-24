@@ -1,5 +1,4 @@
-import os
-from typing import Literal
+from typing import List, Literal, Optional
 
 import numpy as np
 from loguru import logger
@@ -22,19 +21,15 @@ class URDFLoader(BaseManipulator):
         axis_orientation: list[int] | None = None,
     ):
         self.URDF_FILE_PATH = urdf_path
-        # Validate URDF file exists
-        if not os.path.exists(urdf_path):
-            raise FileNotFoundError(f"URDF file not found: {urdf_path}")
-            
-        self.END_EFFECTOR_LINK_INDEX = end_effector_link_index
-        self.GRIPPER_JOINT_INDEX = gripper_joint_index
+        self.END_EFFECTOR_LINK_INDEX = int(end_effector_link_index)
+        self.GRIPPER_JOINT_INDEX = int(gripper_joint_index)
 
         if axis_orientation is not None:
             self.AXIS_ORIENTATION = axis_orientation
         else:
             self.AXIS_ORIENTATION = [0, 0, 0, 1]
 
-        super().__init__()
+        super().__init__(only_simulation=True)
 
     async def connect(self):
         """
@@ -52,7 +47,12 @@ class URDFLoader(BaseManipulator):
         """
         This config is used for PID tuning, motors offsets, and other parameters.
         """
-        self.config = BaseRobotConfig(
+        self.config = self.get_default_base_robot_config()
+
+    def get_default_base_robot_config(
+        self, voltage: str = "6.0", raise_if_none: bool = False
+    ) -> BaseRobotConfig:
+        return BaseRobotConfig(
             name=self.name,
             servos_voltage=6.0,
             servos_offsets=[0] * len(self.SERVO_IDS),
@@ -82,6 +82,23 @@ class URDFLoader(BaseManipulator):
         :param d_gain: Derivative gain (0-255)
         """
         pass
+
+    def read_joints_position(
+        self,
+        unit: Literal["rad", "motor_units", "degrees", "other"] = "rad",
+        source: Literal["sim", "robot"] = "robot",
+        joints_ids: Optional[List[int]] = None,
+        min_value: Optional[float] = None,
+        max_value: Optional[float] = None,
+    ) -> np.ndarray:
+        # Override the joint position to always read from the simulation
+        return super().read_joints_position(
+            unit=unit,
+            source="sim",
+            joints_ids=joints_ids,
+            min_value=min_value,
+            max_value=max_value,
+        )
 
     def read_motor_position(self, servo_id: int, **kwargs) -> int | None:
         """
